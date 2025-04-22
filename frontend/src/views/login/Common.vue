@@ -3,7 +3,7 @@
     <div class="content" style="margin: 0 auto">
       <div class="top">
         <div class="header">
-          <span class="title">药品销售管理系统</span>
+          <span class="title">连锁药店管理系统</span>
         </div>
         <div class="desc"></div>
       </div>
