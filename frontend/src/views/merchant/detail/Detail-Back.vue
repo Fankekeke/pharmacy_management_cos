@@ -7,18 +7,26 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="供应商名称"
+                label="药品名称"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.name"/>
+                <a-input v-model="queryParams.drugName"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="社会编码"
+                label="所属品牌"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.creditCode"/>
+                <a-input v-model="queryParams.brand"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="24">
+              <a-form-item
+                label="订单编号"
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 18, offset: 1}">
+                <a-input v-model="queryParams.orderCode"/>
               </a-form-item>
             </a-col>
           </div>
@@ -31,8 +39,6 @@
     </div>
     <div>
       <div class="operator">
-        <a-button type="primary" ghost @click="add">添加</a-button>
-        <a-button @click="batchDelete">删除</a-button>
       </div>
       <!-- 表格区域 -->
       <a-table ref="TableInfo"
@@ -44,43 +50,18 @@
                :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
                :scroll="{ x: 900 }"
                @change="handleTableChange">
-        <template slot="avatarShow" slot-scope="text, record">
-          <template>
-            <img alt="头像" :src="'static/avatar/' + text">
-          </template>
-        </template>
-        <template slot="contentShow" slot-scope="text, record">
+        <template slot="addressShow" slot-scope="text, record">
           <template>
             <a-tooltip>
               <template slot="title">
-                {{ record.content }}
+                {{ record.userAddress }}
               </template>
-              {{ record.content.slice(0, 30) }} ...
+              {{ record.userAddress.slice(0, 8) }} ...
             </a-tooltip>
           </template>
         </template>
-        <template slot="operation" slot-scope="text, record">
-          <a-icon type="cloud" @click="handleEnterpriseViewOpen(record)" title="详 情"></a-icon>
-          <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改" style="margin-left: 15px"></a-icon>
-        </template>
       </a-table>
     </div>
-    <enterprise-add
-      :enterpriseVisiable="enterpriseAdd.visiable"
-      @close="enterpriseClose"
-      @success="enterpriseSuccess">
-    </enterprise-add>
-    <enterprise-edit
-      ref="enterpriseEdit"
-      @close="handleEnterpriseEditClose"
-      @success="handleEnterpriseEditSuccess"
-      :enterpriseEditVisiable="enterpriseEdit.visiable">
-    </enterprise-edit>
-    <enterprise-view
-      @close="handleEnterpriseViewClose"
-      :enterpriseShow="enterpriseView.visiable"
-      :enterpriseData="enterpriseView.data">
-    </enterprise-view>
   </a-card>
 </template>
 
@@ -88,31 +69,20 @@
 import RangeDate from '@/components/datetime/RangeDate'
 import {mapState} from 'vuex'
 import moment from 'moment'
-import EnterpriseAdd from './EnterpriseAdd.vue'
-import EnterpriseEdit from './EnterpriseEdit.vue'
-import EnterpriseView from './EnterpriseView.vue'
 moment.locale('zh-cn')
 
 export default {
-  name: 'User',
-  components: {EnterpriseAdd, EnterpriseEdit, EnterpriseView, RangeDate},
+  name: 'detail',
+  components: {RangeDate},
   data () {
     return {
-      enterpriseAdd: {
-        visiable: false
-      },
-      enterpriseView: {
-        visiable: false,
-        data: null
-      },
-      enterpriseEdit: {
-        visiable: false
-      },
-      userView: {
-        visiable: false,
-        data: null
-      },
       advanced: false,
+      detailAdd: {
+        visiable: false
+      },
+      detailEdit: {
+        visiable: false
+      },
       queryParams: {},
       filteredInfo: null,
       sortedInfo: null,
@@ -137,11 +107,21 @@ export default {
     }),
     columns () {
       return [{
-        title: '供应商名称',
-        dataIndex: 'name'
+        title: '订单编号',
+        dataIndex: 'code'
       }, {
-        title: '单位简称',
-        dataIndex: 'abbreviation',
+        title: '客户名称',
+        dataIndex: 'name',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return <a-tag>平台内下单</a-tag>
+          }
+        }
+      }, {
+        title: '联系方式',
+        dataIndex: 'phone',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
@@ -150,8 +130,8 @@ export default {
           }
         }
       }, {
-        title: '统一社会信用代码',
-        dataIndex: 'creditCode',
+        title: '收获地址',
+        dataIndex: 'userAddress',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
@@ -160,8 +140,26 @@ export default {
           }
         }
       }, {
-        title: '单位性质',
-        dataIndex: 'nature',
+        title: '药品名称',
+        dataIndex: 'drugName'
+      }, {
+        title: '品牌',
+        dataIndex: 'brand'
+      }, {
+        title: '药品图片',
+        dataIndex: 'images',
+        customRender: (text, record, index) => {
+          if (!record.images) return <a-avatar shape="square" icon="user" />
+          return <a-popover>
+            <template slot="content">
+              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.images.split(',')[0] } />
+            </template>
+            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.images.split(',')[0] } />
+          </a-popover>
+        }
+      }, {
+        title: '数量',
+        dataIndex: 'quantity',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
@@ -170,49 +168,25 @@ export default {
           }
         }
       }, {
-        title: '经营状态',
-        dataIndex: 'status',
+        title: '单价',
+        dataIndex: 'unitPrice',
         customRender: (text, row, index) => {
           if (text !== null) {
-            return text
+            return text + '元'
           } else {
             return '- -'
           }
         }
       }, {
-        title: '法定代表人',
-        dataIndex: 'corporateRepresentative',
+        title: '总价格',
+        dataIndex: 'allPrice',
         customRender: (text, row, index) => {
           if (text !== null) {
-            return text
+            return text + '元'
           } else {
             return '- -'
           }
         }
-      }, {
-        title: '注册资本（万元）',
-        dataIndex: 'registeredCapital',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '成立日期',
-        dataIndex: 'establishmentDate',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '操作',
-        dataIndex: 'operation',
-        scopedSlots: {customRender: 'operation'}
       }]
     }
   },
@@ -220,48 +194,34 @@ export default {
     this.fetch()
   },
   methods: {
-    handleEnterpriseViewOpen (record) {
-      this.enterpriseView.data = record
-      this.enterpriseView.visiable = true
-    },
-    handleEnterpriseViewClose () {
-      this.enterpriseView.visiable = false
-    },
-    handleEnterpriseEditClose () {
-      this.enterpriseEdit.visiable = false
-    },
-    handleEnterpriseEditSuccess () {
-      this.enterpriseEdit.visiable = false
-      this.$message.success('修改成功')
-      this.fetch()
-    },
-    enterpriseClose () {
-      this.enterpriseAdd.visiable = false
-    },
-    enterpriseSuccess () {
-      this.enterpriseAdd.visiable = false
-      this.$message.success('导入成功')
-      this.fetch()
-    },
-    add () {
-      this.enterpriseAdd.visiable = true
-    },
-    edit (record) {
-      this.$refs.enterpriseEdit.setFormValues(record)
-      this.enterpriseEdit.visiable = true
-    },
-    view (row) {
-      this.userView.data = row
-      this.userView.visiable = true
-    },
-    handleUserViewClose () {
-      this.userView.visiable = false
-    },
     onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
     },
     toggleAdvanced () {
       this.advanced = !this.advanced
+    },
+    add () {
+      this.detailAdd.visiable = true
+    },
+    handledetailAddClose () {
+      this.detailAdd.visiable = false
+    },
+    handledetailAddSuccess () {
+      this.detailAdd.visiable = false
+      this.$message.success('新增库存成功')
+      this.search()
+    },
+    edit (record) {
+      this.$refs.detailEdit.setFormValues(record)
+      this.detailEdit.visiable = true
+    },
+    handledetailEditClose () {
+      this.detailEdit.visiable = false
+    },
+    handledetailEditSuccess () {
+      this.detailEdit.visiable = false
+      this.$message.success('修改库存成功')
+      this.search()
     },
     handleDeptChange (value) {
       this.queryParams.deptId = value || ''
@@ -278,7 +238,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/enterprise-info/' + ids).then(() => {
+          that.$delete('/cos/detail-info/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -348,10 +308,10 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      if (params.readStatus === undefined) {
-        delete params.readStatus
+      if (params.type === undefined) {
+        delete params.type
       }
-      this.$get('/cos/enterprise-info/page', {
+      this.$get('/cos/order-detail/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

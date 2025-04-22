@@ -3,34 +3,28 @@
     <div :class="advanced ? 'search' : null">
       <!-- 搜索区域 -->
       <a-form layout="horizontal">
-        <a-row >
-        <div :class="advanced ? null: 'fold'">
-            <a-col :md="6" :sm="12" >
+        <a-row :gutter="15">
+          <div :class="advanced ? null: 'fold'">
+            <a-col :md="6" :sm="24">
               <a-form-item
-                label="用户名"
+                label="员工姓名"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.username"/>
+                <a-input v-model="queryParams.name"/>
               </a-form-item>
             </a-col>
-          <template v-if="advanced">
-            <a-col :md="12" :sm="24" >
+            <a-col :md="6" :sm="24">
               <a-form-item
-                label="创建时间"
+                label="员工编号"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <range-date @change="handleDateChange" ref="createTime"></range-date>
+                <a-input v-model="queryParams.code"/>
               </a-form-item>
             </a-col>
-          </template>
-        </div>
+          </div>
           <span style="float: right; margin-top: 3px;">
             <a-button type="primary" @click="search">查询</a-button>
             <a-button style="margin-left: 8px" @click="reset">重置</a-button>
-             <a @click="toggleAdvanced" style="margin-left: 8px">
-              {{advanced ? '收起' : '展开'}}
-              <a-icon :type="advanced ? 'up' : 'down'" />
-            </a>
           </span>
         </a-row>
       </a-form>
@@ -43,52 +37,61 @@
       <!-- 表格区域 -->
       <a-table ref="TableInfo"
                :columns="columns"
+               :rowKey="record => record.id"
                :dataSource="dataSource"
                :pagination="pagination"
                :loading="loading"
                :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
                :scroll="{ x: 900 }"
                @change="handleTableChange">
-        <template slot="email" slot-scope="text, record">
-          <a-popover placement="topLeft">
-            <template slot="content">
-              <div>{{text}}</div>
-            </template>
-            <p style="width: 150px;margin-bottom: 0">{{text}}</p>
-          </a-popover>
+        <template slot="titleShow" slot-scope="text, record">
+          <template>
+            <a-tooltip>
+              <template slot="title">
+                {{ record.title }}
+              </template>
+              {{ record.title.slice(0, 8) }} ...
+            </a-tooltip>
+          </template>
         </template>
         <template slot="operation" slot-scope="text, record">
-          <a-badge v-hasNoPermission="['user:update','user:view']" status="warning" text="无权限"></a-badge>
+          <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改" style="margin-left: 15px"></a-icon>
         </template>
       </a-table>
     </div>
-    <!-- 新增用户 -->
-    <user-add
-      @close="handleUserAddClose"
-      @success="handleUserAddSuccess"
-      :userAddVisiable="userAdd.visiable">
-    </user-add>
+    <staff-add
+      v-if="staffAdd.visiable"
+      @close="handlestaffAddClose"
+      @success="handlestaffAddSuccess"
+      :staffAddVisiable="staffAdd.visiable">
+    </staff-add>
+    <staff-edit
+      ref="staffEdit"
+      @close="handlestaffEditClose"
+      @success="handlestaffEditSuccess"
+      :staffEditVisiable="staffEdit.visiable">
+    </staff-edit>
   </a-card>
 </template>
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import UserAdd from './AdminAdd.vue'
+import staffAdd from './StaffAdd'
+import staffEdit from './StaffEdit'
+import {mapState} from 'vuex'
+import moment from 'moment'
+moment.locale('zh-cn')
 
 export default {
-  name: 'User',
-  components: {UserAdd, RangeDate},
+  name: 'staff',
+  components: {staffAdd, staffEdit, RangeDate},
   data () {
     return {
       advanced: false,
-      userInfo: {
-        visiable: false,
-        data: {}
-      },
-      userAdd: {
+      staffAdd: {
         visiable: false
       },
-      userEdit: {
+      staffEdit: {
         visiable: false
       },
       queryParams: {},
@@ -105,54 +108,96 @@ export default {
         showQuickJumper: true,
         showSizeChanger: true,
         showTotal: (total, range) => `显示 ${range[0]} ~ ${range[1]} 条记录，共 ${total} 条记录`
-      }
+      },
+      userList: []
     }
   },
   computed: {
+    ...mapState({
+      currentUser: state => state.account.user
+    }),
     columns () {
-      let { sortedInfo, filteredInfo } = this
-      sortedInfo = sortedInfo || {}
-      filteredInfo = filteredInfo || {}
       return [{
-        title: '用户名',
-        dataIndex: 'username',
-        sorter: true,
-        sortOrder: sortedInfo.columnKey === 'username' && sortedInfo.order
+        title: '员工姓名',
+        dataIndex: 'name'
       }, {
-        title: '密码',
-        dataIndex: 'password',
+        title: '员工编号',
+        dataIndex: 'code'
+      }, {
+        title: '所属药店',
+        dataIndex: 'pharmacyName',
         customRender: (text, row, index) => {
-          return '******'
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '性别',
+        dataIndex: 'sex',
+        customRender: (text, row, index) => {
+          switch (text) {
+            case 1:
+              return <a-tag>男</a-tag>
+            case 2:
+              return <a-tag>女</a-tag>
+            default:
+              return '- -'
+          }
         }
       }, {
         title: '状态',
         dataIndex: 'status',
         customRender: (text, row, index) => {
           switch (text) {
-            case '0':
-              return <a-tag color="red">锁定</a-tag>
-            case '1':
-              return <a-tag color="cyan">有效</a-tag>
+            case 1:
+              return <a-tag color="blue">在职</a-tag>
+            case 2:
+              return <a-tag color="pink">离职</a-tag>
             default:
-              return text
+              return '- -'
           }
-        },
-        filters: [
-          { text: '有效', value: '1' },
-          { text: '锁定', value: '0' }
-        ],
-        filterMultiple: false,
-        filteredValue: filteredInfo.status || null,
-        onFilter: (value, record) => record.status.includes(value)
+        }
+      }, {
+        title: '照片',
+        dataIndex: 'images',
+        customRender: (text, record, index) => {
+          if (!record.images) return <a-avatar shape="square" icon="user" />
+          return <a-popover>
+            <template slot="content">
+              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.images.split(',')[0] } />
+            </template>
+            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.images.split(',')[0] } />
+          </a-popover>
+        }
+      }, {
+        title: '是否为管理',
+        dataIndex: 'status',
+        customRender: (text, row, index) => {
+          switch (text) {
+            case 1:
+              return <a-tag color="green">是</a-tag>
+            case 0:
+              return <a-tag color="red">否</a-tag>
+            default:
+              return '- -'
+          }
+        }
       }, {
         title: '创建时间',
-        dataIndex: 'createTime',
-        sorter: true,
-        sortOrder: sortedInfo.columnKey === 'createTime' && sortedInfo.order
+        dataIndex: 'createDate',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
       }, {
         title: '操作',
         dataIndex: 'operation',
-        scopedSlots: { customRender: 'operation' }
+        scopedSlots: {customRender: 'operation'}
       }]
     }
   },
@@ -160,54 +205,43 @@ export default {
     this.fetch()
   },
   methods: {
+    editStatus (row, status) {
+      this.$post('/cos/staff-info/account/status', { staffId: row.id, status }).then((r) => {
+        this.$message.success('修改成功')
+        this.fetch()
+      })
+    },
     onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
     },
     toggleAdvanced () {
       this.advanced = !this.advanced
-      if (!this.advanced) {
-        this.queryParams.createTimeFrom = ''
-        this.queryParams.createTimeTo = ''
-      }
-    },
-    view (record) {
-      this.userInfo.data = record
-      this.userInfo.visiable = true
     },
     add () {
-      this.userAdd.visiable = true
+      this.staffAdd.visiable = true
     },
-    handleUserAddClose () {
-      this.userAdd.visiable = false
+    handlestaffAddClose () {
+      this.staffAdd.visiable = false
     },
-    handleUserAddSuccess () {
-      this.userAdd.visiable = false
-      this.$message.success('新增用户成功，初始密码为1234qwer')
+    handlestaffAddSuccess () {
+      this.staffAdd.visiable = false
+      this.$message.success('新增员工成功')
       this.search()
     },
     edit (record) {
-      this.$refs.userEdit.setFormValues(record)
-      this.userEdit.visiable = true
+      this.$refs.staffEdit.setFormValues(record)
+      this.staffEdit.visiable = true
     },
-    handleUserEditClose () {
-      this.userEdit.visiable = false
+    handlestaffEditClose () {
+      this.staffEdit.visiable = false
     },
-    handleUserEditSuccess () {
-      this.userEdit.visiable = false
-      this.$message.success('修改用户成功')
+    handlestaffEditSuccess () {
+      this.staffEdit.visiable = false
+      this.$message.success('修改员工成功')
       this.search()
-    },
-    handleUserInfoClose () {
-      this.userInfo.visiable = false
     },
     handleDeptChange (value) {
       this.queryParams.deptId = value || ''
-    },
-    handleDateChange (value) {
-      if (value) {
-        this.queryParams.createTimeFrom = value[0]
-        this.queryParams.createTimeTo = value[1]
-      }
     },
     batchDelete () {
       if (!this.selectedRowKeys.length) {
@@ -220,11 +254,8 @@ export default {
         content: '当您点击确定按钮后，这些记录将会被彻底删除',
         centered: true,
         onOk () {
-          let userIds = []
-          for (let key of that.selectedRowKeys) {
-            userIds.push(that.dataSource[key].userId)
-          }
-          that.$delete('user/' + userIds.join(',')).then(() => {
+          let ids = that.selectedRowKeys.join(',')
+          that.$delete('/cos/staff-info/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -233,48 +264,6 @@ export default {
         onCancel () {
           that.selectedRowKeys = []
         }
-      })
-    },
-    resetPassword () {
-      if (!this.selectedRowKeys.length) {
-        this.$message.warning('请选择需要重置密码的用户')
-        return
-      }
-      let that = this
-      this.$confirm({
-        title: '确定重置选中用户密码?',
-        content: '当您点击确定按钮后，这些用户的密码将会重置为1234qwer',
-        centered: true,
-        onOk () {
-          let usernames = []
-          for (let key of that.selectedRowKeys) {
-            usernames.push(that.dataSource[key].username)
-          }
-          that.$put('user/password/reset', {
-            usernames: usernames.join(',')
-          }).then(() => {
-            that.$message.success('重置用户密码成功')
-            that.selectedRowKeys = []
-          })
-        },
-        onCancel () {
-          that.selectedRowKeys = []
-        }
-      })
-    },
-    exportExcel () {
-      let {sortedInfo, filteredInfo} = this
-      let sortField, sortOrder
-      // 获取当前列的排序和列的过滤规则
-      if (sortedInfo) {
-        sortField = sortedInfo.field
-        sortOrder = sortedInfo.order
-      }
-      this.$export('user/excel', {
-        sortField: sortField,
-        sortOrder: sortOrder,
-        ...this.queryParams,
-        ...filteredInfo
       })
     },
     search () {
@@ -307,12 +296,6 @@ export default {
       this.sortedInfo = null
       // 重置查询参数
       this.queryParams = {}
-      // 清空部门树选择
-      this.$refs.deptTree.reset()
-      // 清空时间选择
-      if (this.advanced) {
-        this.$refs.createTime.reset()
-      }
       this.fetch()
     },
     handleTableChange (pagination, filters, sorter) {
@@ -321,7 +304,6 @@ export default {
       this.filteredInfo = filters
       this.sortedInfo = sorter
 
-      this.userInfo.visiable = false
       this.fetch({
         sortField: sorter.field,
         sortOrder: sorter.order,
@@ -336,26 +318,27 @@ export default {
         // 如果分页信息不为空，则设置表格当前第几页，每页条数，并设置查询分页参数
         this.$refs.TableInfo.pagination.current = this.paginationInfo.current
         this.$refs.TableInfo.pagination.pageSize = this.paginationInfo.pageSize
-        params.pageSize = this.paginationInfo.pageSize
-        params.pageNum = this.paginationInfo.current
+        params.size = this.paginationInfo.pageSize
+        params.current = this.paginationInfo.current
       } else {
         // 如果分页信息为空，则设置为默认值
-        params.pageSize = this.pagination.defaultPageSize
-        params.pageNum = this.pagination.defaultCurrent
+        params.size = this.pagination.defaultPageSize
+        params.current = this.pagination.defaultCurrent
       }
-      this.$get('user', {
+      this.$get('/cos/staff-info/page', {
         ...params
       }).then((r) => {
-        let data = r.data
-        const pagination = { ...this.pagination }
+        let data = r.data.data
+        const pagination = {...this.pagination}
         pagination.total = data.total
-        this.dataSource = data.rows
+        this.dataSource = data.records
         this.pagination = pagination
         // 数据加载完毕，关闭loading
         this.loading = false
       })
     }
-  }
+  },
+  watch: {}
 }
 </script>
 <style lang="less" scoped>

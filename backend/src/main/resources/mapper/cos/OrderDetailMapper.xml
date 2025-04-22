@@ -17,7 +17,11 @@
         oi.code,
         ui.name,
         ui.phone,
-        ui.address AS userAddress
+        ui.address AS userAddress,
+        phi.name AS pharmacyName,
+        phi.address,
+        phi.legal_person,
+        phi.phone as pharmacyPhone
         from
         order_detail od
         left join drug_info di on
@@ -26,6 +30,8 @@
         (oi.id = od.order_id)
         left join user_info ui on
         (ui.id = oi.user_id)
+        left join pharmacy_info phi on
+        (phi.id = oi.pharmacy_id)
         where
         1 = 1
         <if test="orderDetail.drugName != null and orderDetail.drugName != ''">

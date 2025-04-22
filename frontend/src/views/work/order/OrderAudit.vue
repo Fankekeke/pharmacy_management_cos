@@ -1,47 +1,54 @@
 <template>
-  <a-modal v-model="show" title="订单详情" @cancel="onClose" :width="900">
+  <a-modal v-model="show" title="订单处理" @cancel="onClose" :width="800">
     <template slot="footer">
-      <a-button key="back" @click="onClose" type="danger">
+      <a-button key="back" @click="submit" type="primary">
+        发货
+      </a-button>
+      <a-button @click="onClose">
         关闭
       </a-button>
     </template>
-    <div style="font-size: 13px;font-family: SimHei" v-if="orderData !== null">
+    <div style="font-size: 13px;font-family: SimHei" v-if="orderAuditData !== null">
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">基础信息</span></a-col>
         <a-col :span="8"><b>工单编号：</b>
-          {{ orderData.code }}
+          {{ orderAuditData.code }}
+        </a-col>
+        <a-col :span="8"><b>客户名称：</b>
+          {{ orderAuditData.userName }}
+        </a-col>
+        <a-col :span="8"><b>联系方式：</b>
+          {{ orderAuditData.phone }}
         </a-col>
       </a-row>
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col :span="8"><b>当前状态：</b>
-          <span v-if="orderData.orderStatus == 0">待付款</span>
-          <span v-if="orderData.orderStatus == 1">已下单</span>
-          <span v-if="orderData.orderStatus == 2">配送中</span>
-          <span v-if="orderData.orderStatus == 3">已收货</span>
+          <span v-if="orderAuditData.status == 0">待付款</span>
+          <span v-if="orderAuditData.status == 1">已下单</span>
+          <span v-if="orderAuditData.status == 2">配送中</span>
+          <span v-if="orderAuditData.status == 3">已收货</span>
         </a-col>
         <a-col :span="8"><b>订单金额：</b>
-          {{ orderData.totalCost }} 元
+          {{ orderAuditData.totalCost }} 元
         </a-col>
         <a-col :span="8"><b>下单时间：</b>
-          {{ orderData.createDate }}
+          {{ orderAuditData.createDate }}
         </a-col>
       </a-row>
-      <br/>
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">药店信息</span></a-col>
         <a-col :span="8"><b>药店名称：</b>
-            {{ orderData.pharmacyName }}
+            {{ orderAuditData.pharmacyName }}
           </a-col>
         <a-col :span="8"><b>药店地址：</b>
-          {{ orderData.address }}
+          {{ orderAuditData.address }}
         </a-col>
         <a-col :span="8"><b>联系方式：</b>
-          {{ orderData.pharmacyPhone }}
+          {{ orderAuditData.pharmacyPhone }}
         </a-col>
       </a-row>
-      <br/>
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">购买药品信息</span></a-col>
@@ -50,14 +57,23 @@
           </a-table>
         </a-col>
       </a-row>
-      <br/>
+      <a-divider orientation="left">
+        <span style="font-size: 12px;font-family: SimHei">订单发货</span>
+      </a-divider>
+      <a-row style="padding-left: 24px;padding-right: 24px;" :gutter="50">
+        <a-col :span="24">
+          <a-form-item label='物流备注' v-bind="formItemLayout">
+            <a-textarea :rows="6" v-model="auditData.remark"/>
+          </a-form-item>
+        </a-col>
+      </a-row>
     </div>
   </a-modal>
 </template>
 
 <script>
 import moment from 'moment'
-moment.locale('zh-cn')
+import {mapState} from 'vuex'
 function getBase64 (file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -66,21 +82,29 @@ function getBase64 (file) {
     reader.onerror = error => reject(error)
   })
 }
+moment.locale('zh-cn')
+const formItemLayout = {
+  labelCol: { span: 24 },
+  wrapperCol: { span: 24 }
+}
 export default {
-  name: 'orderView',
+  name: 'OrderAudit',
   props: {
-    orderShow: {
+    orderAuditShow: {
       type: Boolean,
       default: false
     },
-    orderData: {
+    orderAuditData: {
       type: Object
     }
   },
   computed: {
+    ...mapState({
+      currentUser: state => state.account.user
+    }),
     show: {
       get: function () {
-        return this.orderShow
+        return this.orderAuditShow
       },
       set: function () {
       }
@@ -111,57 +135,43 @@ export default {
         title: '单价',
         dataIndex: 'unitPrice'
       }]
-    },
-    logisticsColumns () {
-      return [{
-        title: '物流信息',
-        dataIndex: 'remark'
-      }, {
-        title: '操作时间',
-        dataIndex: 'createDate'
-      }]
+    }
+  },
+  watch: {
+    'orderAuditShow': function (value) {
+      if (value) {
+        this.selectOrderDetail(this.orderAuditData.id)
+      }
     }
   },
   data () {
     return {
+      formItemLayout,
       loading: false,
       fileList: [],
       previewVisible: false,
       previewImage: '',
-      repairInfo: null,
-      reserveInfo: null,
-      durgList: [],
-      logisticsList: [],
-      current: 0
-    }
-  },
-  watch: {
-    orderShow: function (value) {
-      if (value) {
-        this.dataInit(this.orderData.id)
-        this.current = this.orderData.orderStatus
-      }
+      auditData: {
+        remark: ''
+      },
+      staffList: [],
+      durgList: []
     }
   },
   methods: {
-    dataInit (orderId) {
-      // 药品信息
+    moment,
+    selectOrderDetail (orderId) {
       this.$get(`/cos/order-detail/detail/${orderId}`).then((r) => {
         this.durgList = r.data.data
       })
-      // 物流信息
-      this.$get(`/cos/logistics-info/order/${orderId}`).then((r) => {
-        this.logisticsList = r.data.data
+    },
+    selectStaffByProduct (productId) {
+      this.$get(`/cos/staff-info/work/${productId}`).then((r) => {
+        this.staffList = r.data.data
       })
     },
-    imagesInit (images) {
-      if (images !== null && images !== '') {
-        let imageList = []
-        images.split(',').forEach((image, index) => {
-          imageList.push({uid: index, name: image, status: 'done', url: 'http://127.0.0.1:9527/imagesWeb/' + image})
-        })
-        this.fileList = imageList
-      }
+    onDateChange (date) {
+      this.auditData.reserveDate = moment(date).format('YYYY-MM-DD')
     },
     handleCancel () {
       this.previewVisible = false
@@ -176,8 +186,30 @@ export default {
     picHandleChange ({ fileList }) {
       this.fileList = fileList
     },
+    imagesInit (images) {
+      if (images !== null && images !== '') {
+        let imageList = []
+        images.split(',').forEach((image, index) => {
+          imageList.push({uid: index, name: image, status: 'done', url: 'http://127.0.0.1:9527/imagesWeb/' + image})
+        })
+        this.fileList = imageList
+      }
+    },
+    submit () {
+      this.$get(`/cos/order-info/ship`, {
+        'orderId': this.orderAuditData.id,
+        'remark': this.auditData.remark
+      }).then((r) => {
+        this.cleanData()
+        this.$emit('success')
+      })
+    },
     onClose () {
+      this.cleanData()
       this.$emit('close')
+    },
+    cleanData () {
+      this.auditData.remark = ''
     }
   }
 }

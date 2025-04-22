@@ -7,18 +7,18 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="供应商名称"
+                label="药品名称"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.name"/>
+                <a-input v-model="queryParams.drugName"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="社会编码"
+                label="药房名称"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.creditCode"/>
+                <a-input v-model="queryParams.pharmacyName"/>
               </a-form-item>
             </a-col>
           </div>
@@ -31,8 +31,7 @@
     </div>
     <div>
       <div class="operator">
-        <a-button type="primary" ghost @click="add">添加</a-button>
-        <a-button @click="batchDelete">删除</a-button>
+        <a-button type="primary" ghost @click="add">添加库存</a-button>
       </div>
       <!-- 表格区域 -->
       <a-table ref="TableInfo"
@@ -44,43 +43,40 @@
                :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
                :scroll="{ x: 900 }"
                @change="handleTableChange">
-        <template slot="avatarShow" slot-scope="text, record">
-          <template>
-            <img alt="头像" :src="'static/avatar/' + text">
-          </template>
-        </template>
-        <template slot="contentShow" slot-scope="text, record">
+        <template slot="addressShow" slot-scope="text, record">
           <template>
             <a-tooltip>
               <template slot="title">
-                {{ record.content }}
+                {{ record.address }}
               </template>
-              {{ record.content.slice(0, 30) }} ...
+              {{ record.address.slice(0, 8) }} ...
             </a-tooltip>
           </template>
         </template>
         <template slot="operation" slot-scope="text, record">
-          <a-icon type="cloud" @click="handleEnterpriseViewOpen(record)" title="详 情"></a-icon>
-          <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改" style="margin-left: 15px"></a-icon>
+          <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="showModal(record)" title="更新保质期" style="margin-right: 10px"></a-icon>
+          <a-icon v-if="record.shelfStatus == 1" type="caret-down" @click="audit(record.id, 2)" title="取 消" style="margin-right: 10px"></a-icon>
+          <a-icon v-if="record.shelfStatus == null || record.shelfStatus == 2" type="caret-up" @click="audit(record.id, 1)" title="设 置" style="margin-right: 10px"></a-icon>
         </template>
       </a-table>
     </div>
-    <enterprise-add
-      :enterpriseVisiable="enterpriseAdd.visiable"
-      @close="enterpriseClose"
-      @success="enterpriseSuccess">
-    </enterprise-add>
-    <enterprise-edit
-      ref="enterpriseEdit"
-      @close="handleEnterpriseEditClose"
-      @success="handleEnterpriseEditSuccess"
-      :enterpriseEditVisiable="enterpriseEdit.visiable">
-    </enterprise-edit>
-    <enterprise-view
-      @close="handleEnterpriseViewClose"
-      :enterpriseShow="enterpriseView.visiable"
-      :enterpriseData="enterpriseView.data">
-    </enterprise-view>
+    <inventory-add
+      v-if="inventoryAdd.visiable"
+      @close="handleinventoryAddClose"
+      @success="handleinventoryAddSuccess"
+      :inventoryAddVisiable="inventoryAdd.visiable">
+    </inventory-add>
+    <a-modal v-model="dateVisible" title="更新保质期" @ok="handleOk">
+      <a-range-picker @change="onChange" style="width: 100%"/>
+    </a-modal>
+    <a-modal v-model="downVisible" title="下架备注" @ok="handleDownOk">
+      <a-textarea
+        style="width: 100%"
+        v-model="remark"
+        placeholder="Controlled autosize"
+        :auto-size="{ minRows: 3, maxRows: 5 }"
+      />
+    </a-modal>
   </a-card>
 </template>
 
@@ -88,31 +84,30 @@
 import RangeDate from '@/components/datetime/RangeDate'
 import {mapState} from 'vuex'
 import moment from 'moment'
-import EnterpriseAdd from './EnterpriseAdd.vue'
-import EnterpriseEdit from './EnterpriseEdit.vue'
-import EnterpriseView from './EnterpriseView.vue'
+import inventoryAdd from './InventoryAdd'
 moment.locale('zh-cn')
 
 export default {
-  name: 'User',
-  components: {EnterpriseAdd, EnterpriseEdit, EnterpriseView, RangeDate},
+  name: 'inventory',
+  components: {inventoryAdd, RangeDate},
   data () {
     return {
-      enterpriseAdd: {
-        visiable: false
+      dateList: [],
+      thisAuditData: {
+        id: null,
+        status: null
       },
-      enterpriseView: {
-        visiable: false,
-        data: null
-      },
-      enterpriseEdit: {
-        visiable: false
-      },
-      userView: {
-        visiable: false,
-        data: null
-      },
+      thisData: null,
+      dateVisible: false,
+      remark: '',
+      downVisible: false,
       advanced: false,
+      inventoryAdd: {
+        visiable: false
+      },
+      inventoryEdit: {
+        visiable: false
+      },
       queryParams: {},
       filteredInfo: null,
       sortedInfo: null,
@@ -137,82 +132,71 @@ export default {
     }),
     columns () {
       return [{
-        title: '供应商名称',
-        dataIndex: 'name'
+        title: '状态',
+        dataIndex: 'shelfStatus',
+        customRender: (text, row, index) => {
+          switch (text) {
+            case 1:
+              return <a-tag color="green">上架</a-tag>
+            case 2:
+              return <a-tag color="red">下架</a-tag>
+            default:
+              return '- -'
+          }
+        }
       }, {
-        title: '单位简称',
-        dataIndex: 'abbreviation',
+        title: '药店名称',
+        dataIndex: 'pharmacyName'
+      }, {
+        title: '药店编号',
+        dataIndex: 'pharmacyCode'
+      }, {
+        title: '药品名称',
+        dataIndex: 'drugName'
+      }, {
+        title: '品牌',
+        dataIndex: 'brand'
+      }, {
+        title: '药品图片',
+        dataIndex: 'images',
+        customRender: (text, record, index) => {
+          if (!record.images) return <a-avatar shape="square" icon="user" />
+          return <a-popover>
+            <template slot="content">
+              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.images.split(',')[0] } />
+            </template>
+            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.images.split(',')[0] } />
+          </a-popover>
+        }
+      }, {
+        title: '数量',
+        dataIndex: 'reserve',
         customRender: (text, row, index) => {
           if (text !== null) {
-            return text
+            return text + '件'
           } else {
             return '- -'
           }
         }
       }, {
-        title: '统一社会信用代码',
-        dataIndex: 'creditCode',
+        title: '所属分类',
+        dataIndex: 'category',
         customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
+          switch (text) {
+            case 1:
+              return <a-tag>可卡因</a-tag>
+            case 2:
+              return <a-tag>维生素制剂</a-tag>
+            case 3:
+              return <a-tag>鱼肝油</a-tag>
+            case 4:
+              return <a-tag>药物饮料</a-tag>
+            case 5:
+              return <a-tag>膳食纤维</a-tag>
+            default:
+              return '- -'
           }
         }
-      }, {
-        title: '单位性质',
-        dataIndex: 'nature',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '经营状态',
-        dataIndex: 'status',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '法定代表人',
-        dataIndex: 'corporateRepresentative',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '注册资本（万元）',
-        dataIndex: 'registeredCapital',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '成立日期',
-        dataIndex: 'establishmentDate',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '操作',
-        dataIndex: 'operation',
-        scopedSlots: {customRender: 'operation'}
       }]
     }
   },
@@ -220,48 +204,78 @@ export default {
     this.fetch()
   },
   methods: {
-    handleEnterpriseViewOpen (record) {
-      this.enterpriseView.data = record
-      this.enterpriseView.visiable = true
+    onChange (date, dateString) {
+      this.dateList = dateString
     },
-    handleEnterpriseViewClose () {
-      this.enterpriseView.visiable = false
+    showModal (row) {
+      this.thisData = row
+      this.dateVisible = true
     },
-    handleEnterpriseEditClose () {
-      this.enterpriseEdit.visiable = false
+    handleDownOk () {
+      this.$get('/cos/pharmacy-inventory/audit', {id: this.thisAuditData.id, status: this.thisAuditData.status, remark: this.remark}).then((r) => {
+        this.downVisible = false
+        this.$message.success('修改成功')
+        this.search()
+      })
     },
-    handleEnterpriseEditSuccess () {
-      this.enterpriseEdit.visiable = false
-      this.$message.success('修改成功')
-      this.fetch()
+    handleOk (e) {
+      console.log(this.dateList[0])
+      console.log(this.dateList[1])
+      this.$put('/cos/pharmacy-inventory/date/put', {
+        id: this.thisData.id,
+        startDate: this.dateList[0],
+        endDate: this.dateList[1]
+      }).then((r) => {
+        if (r.data.data <= 5 && r.data.data > 0) {
+          this.$message.warn('该药品即将到期请尽快下架')
+        }
+        if (r.data.data <= 0) {
+          this.$message.warn('该药品已经到期请下架')
+        }
+      })
+      this.dateVisible = false
+      this.search()
     },
-    enterpriseClose () {
-      this.enterpriseAdd.visiable = false
-    },
-    enterpriseSuccess () {
-      this.enterpriseAdd.visiable = false
-      this.$message.success('导入成功')
-      this.fetch()
-    },
-    add () {
-      this.enterpriseAdd.visiable = true
-    },
-    edit (record) {
-      this.$refs.enterpriseEdit.setFormValues(record)
-      this.enterpriseEdit.visiable = true
-    },
-    view (row) {
-      this.userView.data = row
-      this.userView.visiable = true
-    },
-    handleUserViewClose () {
-      this.userView.visiable = false
+    audit (id, status) {
+      if (status === 2) {
+        this.thisAuditData.id = id
+        this.thisAuditData.status = status
+        this.downVisible = true
+      } else {
+        this.$get('/cos/pharmacy-inventory/audit', {id, status}).then((r) => {
+          this.$message.success('修改成功')
+          this.search()
+        })
+      }
     },
     onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
     },
     toggleAdvanced () {
       this.advanced = !this.advanced
+    },
+    add () {
+      this.inventoryAdd.visiable = true
+    },
+    handleinventoryAddClose () {
+      this.inventoryAdd.visiable = false
+    },
+    handleinventoryAddSuccess () {
+      this.inventoryAdd.visiable = false
+      this.$message.success('新增库存成功')
+      this.search()
+    },
+    edit (record) {
+      this.$refs.inventoryEdit.setFormValues(record)
+      this.inventoryEdit.visiable = true
+    },
+    handleinventoryEditClose () {
+      this.inventoryEdit.visiable = false
+    },
+    handleinventoryEditSuccess () {
+      this.inventoryEdit.visiable = false
+      this.$message.success('修改库存成功')
+      this.search()
     },
     handleDeptChange (value) {
       this.queryParams.deptId = value || ''
@@ -278,7 +292,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/enterprise-info/' + ids).then(() => {
+          that.$delete('/cos/pharmacy-inventory/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -348,10 +362,10 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      if (params.readStatus === undefined) {
-        delete params.readStatus
+      if (params.type === undefined) {
+        delete params.type
       }
-      this.$get('/cos/enterprise-info/page', {
+      this.$get('/cos/pharmacy-inventory/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

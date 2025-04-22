@@ -64,6 +64,11 @@ public class OrderInfo implements Serializable {
      */
     private Integer orderStatus;
 
+    /**
+     * 所属员工
+     */
+    private Integer staffId;
+
     @TableField(exist = false)
     private String userName;
 
