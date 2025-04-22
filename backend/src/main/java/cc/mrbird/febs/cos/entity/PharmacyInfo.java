@@ -88,5 +88,10 @@ public class PharmacyInfo implements Serializable {
      */
     private String phone;
 
+    /**
+     * 所属账户
+     */
+    private Integer userId;
+
 
 }

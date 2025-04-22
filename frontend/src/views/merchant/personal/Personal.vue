@@ -4,95 +4,76 @@
       <a-col :span="10">
         <a-card :bordered="false">
           <a-form :form="form" layout="vertical">
-            <a-row :gutter="20">
-              <a-col :span="12">
-                <a-form-item label='药店名称' v-bind="formItemLayout">
+            <a-row :gutter="10">
+              <a-divider orientation="left">
+                <span style="font-size: 13px">基础信息填报</span>
+              </a-divider>
+              <a-col :span="8">
+                <a-form-item label='药房名称'>
                   <a-input v-decorator="[
-                  'name',
-                  { rules: [{ required: true, message: '请输入药店名称!' }] }
-                  ]"/>
+            'name',
+            { rules: [{ required: true, message: '请输入名称!' }] }
+            ]"/>
                 </a-form-item>
               </a-col>
-              <a-col :span="12">
-                <a-form-item label='负责人' v-bind="formItemLayout">
-                  <a-input v-decorator="[
-                  'principal',
-                  { rules: [{ required: true, message: '请输入负责人!' }] }
-                  ]"/>
+              <a-col :span="8">
+                <a-form-item label='营业状态'>
+                  <a-select v-decorator="[
+                'businessStatus',
+                ]">
+                    <a-select-option value="1">营业中</a-select-option>
+                    <a-select-option value="2">歇业</a-select-option>
+                  </a-select>
                 </a-form-item>
               </a-col>
-              <a-col :span="12">
-                <a-form-item label='店铺地址'>
+              <a-col :span="8">
+                <a-form-item label='所在地'>
                   <a-input-search
                     v-decorator="[
-                    'address'
-                    ]"
+              'address'
+              ]"
                     enter-button="选择"
                     @search="showChildrenDrawer"
                   />
                 </a-form-item>
               </a-col>
-              <a-col :span="12">
-                <a-form-item label='经度' v-bind="formItemLayout">
+              <a-col :span="8">
+                <a-form-item label='经度'>
                   <a-input v-decorator="[
-                  'longitude',
-                  { rules: [{ required: true, message: '请输入经度!' }] }
-                  ]"/>
+            'longitude'
+            ]"/>
                 </a-form-item>
               </a-col>
-              <a-col :span="12">
-                <a-form-item label='纬度' v-bind="formItemLayout">
+              <a-col :span="8">
+                <a-form-item label='纬度'>
                   <a-input v-decorator="[
-                  'latitude',
-                  { rules: [{ required: true, message: '请输入纬度!' }] }
-                  ]"/>
+            'latitude'
+            ]"/>
                 </a-form-item>
               </a-col>
-              <a-col :span="12">
-                <a-form-item label='联系方式' v-bind="formItemLayout">
+              <a-col :span="8">
+                <a-form-item label='营业时间'>
                   <a-input v-decorator="[
-                  'phone',
-                  { rules: [{ required: true, message: '请输入联系方式!' }] }
-                  ]"/>
+            'businessHours'
+            ]"/>
+                </a-form-item>
+              </a-col>
+              <a-col :span="8">
+                <a-form-item label='法人姓名'>
+                  <a-input v-decorator="[
+            'legalPerson'
+            ]"/>
+                </a-form-item>
+              </a-col>
+              <a-col :span="8">
+                <a-form-item label='联系电话'>
+                  <a-input v-decorator="[
+            'phone'
+            ]"/>
                 </a-form-item>
               </a-col>
               <a-col :span="24">
-                <a-form-item label='营业星期' v-bind="formItemLayout">
-                  <div :style="{ borderBottom: '1px solid #E9E9E9' }">
-                    <a-checkbox :indeterminate="indeterminate" :checked="checkAll" @change="onCheckAllChange">
-                      Check all
-                    </a-checkbox>
-                  </div>
-                  <br />
-                  <a-checkbox-group v-model="checkedList" :options="plainOptions" @change="onChange" />
-                </a-form-item>
-              </a-col>
-              <a-col :span="12">
-                <a-form-item label='开始营业时间' v-bind="formItemLayout">
-                  <a-time-picker :default-open-value="moment('00:00:00', 'HH:mm:ss')" style="width: 100%" v-decorator="[
-                  'operateStartTime',
-                  { rules: [{ required: true, message: '请输入开始营业时间!' }] }
-                  ]" />
-                </a-form-item>
-              </a-col>
-              <a-col :span="12">
-                <a-form-item label='营业结束时间' v-bind="formItemLayout">
-                  <a-time-picker style="width: 100%" v-decorator="[
-                  'operateEndTime',
-                  { rules: [{ required: true, message: '请输入营业结束时间!' }] }
-                  ]" />
-                </a-form-item>
-              </a-col>
-              <a-col :span="24">
-                <a-form-item label='店铺介绍' v-bind="formItemLayout">
-                  <a-textarea :rows="6" v-decorator="[
-                  'content',
-                   { rules: [{ required: true, message: '请输入店铺介绍!' }] }
-                  ]"/>
-                </a-form-item>
-              </a-col>
-              <a-col :span="24">
-                <a-form-item label='图册' v-bind="formItemLayout">
+                <a-form-item label='药店图片' v-bind="formItemLayout">
                   <a-upload
                     name="avatar"
                     action="http://127.0.0.1:9527/file/fileUpload/"
@@ -119,8 +100,11 @@
           <drawerMap :childrenDrawerShow="childrenDrawer" @handlerClosed="handlerClosed"></drawerMap>
         </a-card>
       </a-col>
-      <a-col :span="14">
-        <div id="areas" style="width: 100%;height: 700px;box-shadow: 0 0 0 10px white;"></div>
+      <a-col :span="14" style="padding-top: 25px">
+        <a-divider orientation="left" style="margin-top: 15px">
+          <span style="font-size: 13px">地图位置</span>
+        </a-divider>
+        <div id="areas" style="width: 100%;height: 450px;box-shadow: 0 0 0 10px white;"></div>
       </a-col>
     </a-row>
   </div>
@@ -305,47 +289,14 @@ export default {
     },
     setFormValues ({...user}) {
       this.userId = user.id
-      let fields = ['name', 'dishes', 'code', 'operateEndTime', 'operateStartTime', 'principal', 'longitude', 'latitude', 'address', 'phone', 'content', 'operateDay']
+      let fields = ['name', 'address', 'businessStatus', 'longitude', 'latitude', 'businessHours', 'legalPerson', 'phone']
       Object.keys(user).forEach((key) => {
         if (key === 'images') {
           this.fileList = []
           this.imagesInit(user['images'])
         }
-        if (key === 'operateDay' && user[key] != null) {
-          let operateDay = user[key].split(',')
-          let checkList = []
-          operateDay.forEach(e => {
-            switch (e) {
-              case '1':
-                checkList.push('周一')
-                break
-              case '2':
-                checkList.push('周二')
-                break
-              case '3':
-                checkList.push('周三')
-                break
-              case '4':
-                checkList.push('周四')
-                break
-              case '5':
-                checkList.push('周五')
-                break
-              case '6':
-                checkList.push('周六')
-                break
-              case '7':
-                checkList.push('周日')
-                break
-            }
-          })
-          this.checkedList = checkList
-        }
-        if (key === 'operateStartTime' && user[key] != null) {
-          user[key] = moment(user[key], 'HH:mm:ss')
-        }
-        if (key === 'operateEndTime' && user[key] != null) {
-          user[key] = moment(user[key], 'HH:mm:ss')
+        if (key === 'businessStatus') {
+          user[key] = user[key].toString()
         }
         if (fields.indexOf(key) !== -1) {
           this.form.getFieldDecorator(key)
