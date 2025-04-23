@@ -311,6 +311,7 @@ export default {
       if (params.type === undefined) {
         delete params.type
       }
+      params.pharmacyId = this.currentUser.userId
       this.$get('/cos/order-detail/page', {
         ...params
       }).then((r) => {

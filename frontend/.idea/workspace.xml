@@ -23,42 +23,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b51975f-5e37-45a1-bd9d-0f3c12f944d0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/views/manage/detail/Detail-Back.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/detail/Detail-Back.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/detail/Detail.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/inventory/Inventory.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/inventory/InventoryAdd.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/order/Order.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/order/OrderAdd.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/order/OrderAudit.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/order/OrderStatus.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/order/OrderView.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/personal/Personal.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/position/Staff.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/position/StaffAdd.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/position/StaffEdit.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/salaryRecords/SalaryRecords.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/salaryRecords/SalaryRecordsAdd.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/salaryRecords/SalaryRecordsEdit.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/salaryRecords/SalaryRecordsView.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/staff/Staff.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/staff/StaffAdd.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/staff/StaffEdit.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/statistics/Statistics.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/stock/InventoryAdd.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/merchant/stock/Stock.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/OrderDetailMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/OrderDetailMapper.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/login/Common.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/login/Common.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/manage/admin/Admin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/admin/Admin.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/manage/detail/Detail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/detail/Detail.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/manage/order/Order.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/order/Order.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/manage/order/OrderView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/order/OrderView.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/manage/salaryRecords/SalaryRecords.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/salaryRecords/SalaryRecords.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/supply/enterprise/Enterprise.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/supply/enterprise/Enterprise.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/system/user/User.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/system/user/User.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/house.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/house.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/merchant/detail/Detail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/detail/Detail.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/merchant/inventory/Inventory.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/inventory/Inventory.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/merchant/order/Order.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/order/Order.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/merchant/personal/Personal.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/personal/Personal.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/merchant/position/Staff.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/position/Staff.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/merchant/salaryRecords/SalaryRecords.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/salaryRecords/SalaryRecords.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/merchant/staff/Staff.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/staff/Staff.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/merchant/statistics/Statistics.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/statistics/Statistics.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/merchant/stock/Stock.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/stock/Stock.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,7 +98,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "G:/Project/20250422连锁药店管理系统/pharmacy_management_cos/frontend/src/views/merchant",
+    "last_opened_file_path": "D:/Project/dev/pharmacy_management_cos/frontend",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -282,6 +257,7 @@
       <workItem from="1701691597250" duration="5137000" />
       <workItem from="1745280878424" duration="1267000" />
       <workItem from="1745332210910" duration="3782000" />
+      <workItem from="1745378508250" duration="2294000" />
     </task>
     <servers />
   </component>

@@ -5,8 +5,10 @@ import cc.mrbird.febs.common.exception.FebsException;
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.PharmacyInfo;
 import cc.mrbird.febs.cos.service.IPharmacyInfoService;
+import cc.mrbird.febs.system.service.UserService;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,8 @@ import java.util.List;
 public class PharmacyInfoController {
 
     private final IPharmacyInfoService pharmacyInfoService;
+
+    private final UserService userService;
 
     /**
      * 分页获取药店信息
@@ -73,6 +77,17 @@ public class PharmacyInfoController {
                 put("orderNumDays", pharmacyInfoService.selectOrderNumDays());
             }
         });
+    }
+
+    /**
+     * 根据账户获取商家信息
+     *
+     * @param userId 账户ID
+     * @return 结果
+     */
+    @GetMapping("/getMerchantByUser")
+    public R getMerchantByUser(Integer userId) {
+        return R.ok(pharmacyInfoService.getOne(Wrappers.<PharmacyInfo>lambdaQuery().eq(PharmacyInfo::getUserId, userId)));
     }
 
     /**
@@ -145,11 +160,12 @@ public class PharmacyInfoController {
      * @return 结果
      */
     @PostMapping
-    public R save(PharmacyInfo pharmacyInfo) {
+    public R save(PharmacyInfo pharmacyInfo) throws Exception {
         pharmacyInfo.setCode("PM-" + System.currentTimeMillis());
         pharmacyInfo.setName(StrUtil.cleanBlank(pharmacyInfo.getName()));
         pharmacyInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
-        return R.ok(pharmacyInfoService.save(pharmacyInfo));
+        userService.registPharmacy(pharmacyInfo.getCode(), "123456", pharmacyInfo);
+        return R.ok(true);
     }
 
     /**

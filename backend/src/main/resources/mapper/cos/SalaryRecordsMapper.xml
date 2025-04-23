@@ -24,9 +24,11 @@
         sr.remark,
         si.name AS staffName,
         si.images,
-        si.position
+        si.position,
+        pi.name AS pharmacyName
         FROM salary_records sr
         LEFT JOIN staff_info si ON si.code = sr.staff_code
+        left join pharmacy_info pi on (pi.id = si.pharmacy_id)
         WHERE 1 = 1
         <if test="salaryRecords.staffName != null and salaryRecords.staffName != ''">
             and si.name LIKE CONCAT('%',#{salaryRecords.staffName},'%')
@@ -36,6 +38,9 @@
         </if>
         <if test="salaryRecords.month != null and salaryRecords.month != ''">
             and sr.month = #{salaryRecords.month}
+        </if>
+        <if test="salaryRecords.pharmacyId != null">
+            AND pi.user_id = #{salaryRecords.pharmacyId}
         </if>
         ORDER BY sr.year DESC, sr.month DESC, sr.payroll DESC
     </select>

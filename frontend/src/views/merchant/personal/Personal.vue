@@ -183,7 +183,7 @@ export default {
       })
     },
     getmerchantByUser () {
-      this.$get('/cos/merchant-info/getMerchantByUser', { userId: this.currentUser.userId }).then((r) => {
+      this.$get('/cos/pharmacy-info/getMerchantByUser', { userId: this.currentUser.userId }).then((r) => {
         this.merchantInfo = r.data.data
         this.rowId = this.merchantInfo.id
         if (this.merchantInfo.longitude !== null && this.merchantInfo.latitude !== null) {

@@ -46,6 +46,10 @@
         <if test="orderDetail.userName != null and orderDetail.userName != ''">
             AND ui.name LIKE CONCAT('%',#{orderDetail.userName},'%')
         </if>
+        <if test="orderDetail.pharmacyId != null">
+            AND phi.user_id = #{orderDetail.pharmacyId}
+        </if>
+
     </select>
 
     <!-- 根据订单ID获取购买详细物品 -->

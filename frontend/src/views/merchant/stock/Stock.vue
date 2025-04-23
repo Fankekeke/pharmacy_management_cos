@@ -365,6 +365,7 @@ export default {
       if (params.type === undefined) {
         delete params.type
       }
+      params.pharmacyId = this.currentUser.userId
       this.$get('/cos/pharmacy-inventory/page', {
         ...params
       }).then((r) => {

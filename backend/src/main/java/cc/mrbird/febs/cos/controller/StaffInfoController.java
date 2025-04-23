@@ -4,6 +4,7 @@ package cc.mrbird.febs.cos.controller;
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
+import cc.mrbird.febs.system.service.UserService;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -24,6 +25,8 @@ import java.util.List;
 public class StaffInfoController {
 
     private final IStaffInfoService staffInfoService;
+
+    private final UserService userService;
 
     /**
      * 分页获取员工信息
@@ -86,11 +89,12 @@ public class StaffInfoController {
      * @return 结果
      */
     @PostMapping
-    public R save(StaffInfo staffInfo) {
+    public R save(StaffInfo staffInfo) throws Exception {
         staffInfo.setCode("STF-" + System.currentTimeMillis());
         staffInfo.setName(StrUtil.cleanBlank(staffInfo.getName()));
         staffInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
-        return R.ok(staffInfoService.save(staffInfo));
+        userService.registStaff(staffInfo.getCode(), "123456", staffInfo);
+        return R.ok(true);
     }
 
     /**
