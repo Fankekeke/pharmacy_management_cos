@@ -200,7 +200,18 @@ export default {
     }
   },
   mounted () {
-    this.getStaffList()
+    this.$get('/cos/pharmacy-info/getMerchantByUser', {userId: this.currentUser.userId}).then((r) => {
+      let merchantInfo = r.data.data
+      if (merchantInfo !== null && merchantInfo !== undefined) {
+        setTimeout(() => {
+          let obj = {}
+          obj['pharmacyId'] = merchantInfo.id
+          this.form.setFieldsValue(obj)
+          console.log(this.form.getFieldsValue())
+        }, 500)
+        this.getStaffList(merchantInfo.id)
+      }
+    })
   },
   data () {
     return {
@@ -237,8 +248,8 @@ export default {
         this.gain = r.data.data
       })
     },
-    getStaffList () {
-      this.$get('/cos/staff-info/list').then((r) => {
+    getStaffList (pharmacyId) {
+      this.$get(`/cos/staff-info/list/${pharmacyId}`).then((r) => {
         this.staffList = r.data.data
       })
     },

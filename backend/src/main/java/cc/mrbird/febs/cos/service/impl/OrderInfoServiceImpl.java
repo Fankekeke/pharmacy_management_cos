@@ -79,6 +79,7 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         orderInfo.setCode("OR-" + System.currentTimeMillis());
         orderInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         orderInfo.setPharmacyId(orderInfoVo.getPharmacyId());
+        orderInfo.setStaffId(orderInfoVo.getStaffId());
         // 所属用户
         UserInfo userInfo = userInfoMapper.selectOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, orderInfoVo.getUserId()));
         if (userInfo != null) {

@@ -15,7 +15,7 @@
         </a-divider>
         <a-col :span="12">
           <a-form-item label='药店'>
-            <a-select @change="pharmacyCheck" v-decorator="[
+            <a-select disabled @change="pharmacyCheck" v-decorator="[
               'pharmacyId',
               { rules: [{ required: true, message: '请输入所属药店!' }] }
               ]">
@@ -171,6 +171,17 @@ export default {
   mounted () {
     this.getPharmacy()
     this.getDrug()
+    this.$get('/cos/pharmacy-info/getMerchantByUser', {userId: this.currentUser.userId}).then((r) => {
+      let merchantInfo = r.data.data
+      if (merchantInfo !== null && merchantInfo !== undefined) {
+        setTimeout(() => {
+          let obj = {}
+          obj['pharmacyId'] = merchantInfo.id
+          this.form.setFieldsValue(obj)
+          console.log(this.form.getFieldsValue())
+        }, 500)
+      }
+    })
   },
   methods: {
     handleChange (value, record) {

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.mrbird.febs.cos.dao.DrugRecordMapper">
+
+    <!-- 分页获取药品名称记录信息 -->
+    <select id="queryDrugRecord" resultType="java.util.LinkedHashMap">
+        SELECT
+        dr.*,
+        si.name AS staffName,
+        si.images AS staffImages
+        FROM
+        drug_record dr
+        LEFT JOIN staff_info si ON (si.id = dr.staff_id)
+        WHERE
+        1 = 1
+        <if test="drugRecord.drugName != null and drugRecord.drugName != ''">
+            AND dr.drug_name LIKE CONCAT('%',#{drugRecord.drugName},'%')
+        </if>
+        <if test="drugRecord.formerName != null and drugRecord.formerName != ''">
+            AND dr.former_name LIKE CONCAT('%',#{drugRecord.formerName},'%')
+        </if>
+        ORDER BY
+        dr.create_date DESC
+    </select>
+</mapper>

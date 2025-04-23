@@ -23,13 +23,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b51975f-5e37-45a1-bd9d-0f3c12f944d0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/views/work/drug/Drug.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/work/drug/DrugAdd.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/work/drug/DrugEdit.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/work/drug/DrugView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/common/generator/CodeGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/common/generator/CodeGenerator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/PharmacyInfoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/PharmacyInfoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/service/IPharmacyInfoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/service/IPharmacyInfoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/service/impl/PharmacyInfoServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/service/impl/PharmacyInfoServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/StaffInfoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/StaffInfoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/dao/OrderInfoMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/dao/OrderInfoMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/service/impl/OrderInfoServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/service/impl/OrderInfoServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/HomePage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/HomePage.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/manage/component/home/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/component/home/Home.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/work/order/Order.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/work/order/Order.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/manage/order/Order.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/order/Order.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/manage/order/OrderAdd.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/order/OrderAdd.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/merchant/order/OrderAdd.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/order/OrderAdd.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/merchant/personal/Personal.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/personal/Personal.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/merchant/salaryRecords/SalaryRecordsAdd.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/salaryRecords/SalaryRecordsAdd.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/merchant/staff/StaffAdd.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/staff/StaffAdd.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/merchant/stock/InventoryAdd.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/stock/InventoryAdd.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/statistics/rank/Rank.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/statistics/rank/Rank.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/work/order/OrderAdd.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/work/order/OrderAdd.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/work/personal/Personal.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/work/personal/Personal.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/views/work/salaryRecords/SalaryRecords.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/work/salaryRecords/SalaryRecords.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -95,7 +108,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "D:/Project/dev/pharmacy_management_cos/frontend",
+    "last_opened_file_path": "G:/Project/20250422连锁药店管理系统/pharmacy_management_cos/frontend/src/views/work",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -107,11 +120,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="G:\Project\20250422连锁药店管理系统\pharmacy_management_cos\frontend\src\views\work" />
       <recent name="G:\Project\20250422连锁药店管理系统\pharmacy_management_cos\frontend\src\views\merchant" />
       <recent name="G:\Project\20250422连锁药店管理系统\pharmacy_management_cos\frontend\src\views\manage\detail" />
       <recent name="G:\Project\药品销售平台\drug_sales\frontend\src\views\manage" />
       <recent name="G:\Project\药品销售平台\drug_sales\frontend\src\views\manage\stock" />
-      <recent name="G:\Project\药品销售平台\drug_sales\frontend\src\utils" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -255,6 +268,7 @@
       <workItem from="1745280878424" duration="1267000" />
       <workItem from="1745332210910" duration="3782000" />
       <workItem from="1745378508250" duration="4981000" />
+      <workItem from="1745415445384" duration="9252000" />
     </task>
     <servers />
   </component>

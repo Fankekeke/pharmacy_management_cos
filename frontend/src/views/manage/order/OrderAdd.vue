@@ -29,10 +29,10 @@
         <a-col :span="12">
           <a-form-item label='员工'>
             <a-select v-decorator="[
-              'staffCode',
+              'staffId',
               { rules: [{ required: true, message: '请输入所属员工!' }] }
               ]">
-              <a-select-option :value="item.code" v-for="(item, index) in staffList" :key="index">{{
+              <a-select-option :value="item.id" v-for="(item, index) in staffList" :key="index">{{
                   item.name
                 }}
               </a-select-option>

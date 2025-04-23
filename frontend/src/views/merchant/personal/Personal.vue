@@ -307,10 +307,6 @@ export default {
       })
     },
     handleSubmit () {
-      if (this.checkedList.length === 0) {
-        this.$message.warn('至少选择一天')
-        return false
-      }
       // 获取图片List
       let images = []
       this.fileList.forEach(image => {
@@ -325,11 +321,8 @@ export default {
           this.loading = true
           let user = this.form.getFieldsValue()
           user.images = images.length > 0 ? images.join(',') : null
-          user.operateDay = this.checkedList.join(',')
-          user.operateStartTime = moment(user.operateStartTime).format('HH:mm:ss')
-          user.operateEndTime = moment(user.operateEndTime).format('HH:mm:ss')
           user.id = this.rowId
-          this.$put('/cos/merchant-info', {
+          this.$put('/cos/pharmacy-info', {
             ...user
           }).then((r) => {
             this.loading = false

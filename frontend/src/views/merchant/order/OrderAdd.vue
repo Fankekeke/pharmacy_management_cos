@@ -15,7 +15,7 @@
         </a-divider>
         <a-col :span="12">
           <a-form-item label='药店'>
-            <a-select @change="pharmacyCheck" v-decorator="[
+            <a-select disabled @change="pharmacyCheck" v-decorator="[
               'pharmacyId',
               { rules: [{ required: true, message: '请输入所属药店!' }] }
               ]">
@@ -29,10 +29,10 @@
         <a-col :span="12">
           <a-form-item label='员工'>
             <a-select v-decorator="[
-              'staffCode',
+              'staffId',
               { rules: [{ required: true, message: '请输入所属员工!' }] }
               ]">
-              <a-select-option :value="item.code" v-for="(item, index) in staffList" :key="index">{{
+              <a-select-option :value="item.id" v-for="(item, index) in staffList" :key="index">{{
                   item.name
                 }}
               </a-select-option>
@@ -176,6 +176,19 @@ export default {
     'orderAddShow': function (value) {
       if (value) {
         this.dataList = []
+        this.$get('/cos/pharmacy-info/getMerchantByUser', {userId: this.currentUser.userId}).then((r) => {
+          let merchantInfo = r.data.data
+          if (merchantInfo !== null && merchantInfo !== undefined) {
+            this.pharmacyCheck(merchantInfo.id)
+            setTimeout(() => {
+              let obj = {}
+              obj['pharmacyId'] = merchantInfo.id
+              this.form.setFieldsValue(obj)
+              console.log(this.form.getFieldsValue())
+            }, 500)
+            this.getStaff(merchantInfo.id)
+          }
+        })
       }
     }
   },
@@ -200,7 +213,6 @@ export default {
   },
   mounted () {
     this.getPharmacy()
-    this.getStaff()
   },
   methods: {
     handleChange (value, record) {
@@ -233,7 +245,7 @@ export default {
       this.dataList.push({drugId: null, quantity: 1, brand: '', classification: '', dosageForm: '', unitPrice: ''})
     },
     getStaff (pharmacyId) {
-      this.$get(`/cos/staff-info/list`).then((r) => {
+      this.$get(`/cos/staff-info/list/${pharmacyId}`).then((r) => {
         this.staffList = r.data.data
       })
     },

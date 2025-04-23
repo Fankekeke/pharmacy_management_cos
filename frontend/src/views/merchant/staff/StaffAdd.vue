@@ -31,7 +31,7 @@
         </a-col>
         <a-col :span="12">
           <a-form-item label='所属药店' v-bind="formItemLayout">
-            <a-select v-decorator="[
+            <a-select disabled v-decorator="[
               'pharmacyId',
               { rules: [{ required: true, message: '请输入所属药店!' }] }
               ]">
@@ -140,6 +140,12 @@ export default {
       }
     }
   },
+  watch: {
+    'staffAddVisiable': function (value) {
+      if (value) {
+      }
+    }
+  },
   data () {
     return {
       formItemLayout,
@@ -158,6 +164,17 @@ export default {
     getPharmacy () {
       this.$get('/cos/pharmacy-info/list').then((r) => {
         this.pharmacyList = r.data.data
+        this.$get('/cos/pharmacy-info/getMerchantByUser', {userId: this.currentUser.userId}).then((r) => {
+          let merchantInfo = r.data.data
+          if (merchantInfo !== null && merchantInfo !== undefined) {
+            setTimeout(() => {
+              let obj = {}
+              obj['pharmacyId'] = merchantInfo.id
+              this.form.setFieldsValue(obj)
+              console.log(this.form.getFieldsValue())
+            }, 500)
+          }
+        })
       })
     },
     handleCancel () {

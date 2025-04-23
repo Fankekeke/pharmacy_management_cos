@@ -14,14 +14,6 @@
                 </a-form-item>
               </a-col>
               <a-col :span="24">
-                <a-form-item label='联系方式' v-bind="formItemLayout">
-                  <a-input v-decorator="[
-            'phone',
-            { rules: [{ required: true, message: '请输入联系方式!' }] }
-            ]"/>
-                </a-form-item>
-              </a-col>
-              <a-col :span="24">
                 <a-form-item label='员工性别' v-bind="formItemLayout">
                   <a-select v-decorator="[
               'sex',
@@ -123,7 +115,6 @@ export default {
   },
   mounted () {
     this.getmerchantByUser()
-    baiduMap.initMap('areas')
   },
   methods: {
     moment,
@@ -140,8 +131,9 @@ export default {
       })
     },
     getmerchantByUser () {
-      this.$get('/cos/staff-info/queryStaffByUserId', { userId: this.currentUser.userId }).then((r) => {
+      this.$get('/cos/staff-info/selectStaffByUserId', { userId: this.currentUser.userId }).then((r) => {
         this.merchantInfo = r.data.data
+        console.log(this.merchantInfo)
         this.rowId = this.merchantInfo.id
         this.setFormValues(r.data.data)
       })

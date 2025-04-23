@@ -15,7 +15,7 @@
         </a-divider>
         <a-col :span="12">
           <a-form-item label='药店'>
-            <a-select @change="pharmacyCheck" v-decorator="[
+            <a-select disabled @change="pharmacyCheck" v-decorator="[
               'pharmacyId',
               { rules: [{ required: true, message: '请输入所属药店!' }] }
               ]">
@@ -28,11 +28,11 @@
         </a-col>
         <a-col :span="12">
           <a-form-item label='员工'>
-            <a-select v-decorator="[
-              'staffCode',
+            <a-select disabled v-decorator="[
+              'staffId',
               { rules: [{ required: true, message: '请输入所属员工!' }] }
               ]">
-              <a-select-option :value="item.code" v-for="(item, index) in staffList" :key="index">{{
+              <a-select-option :value="item.id" v-for="(item, index) in staffList" :key="index">{{
                   item.name
                 }}
               </a-select-option>
@@ -245,6 +245,19 @@ export default {
     getPharmacy () {
       this.$get('/cos/pharmacy-info/list').then((r) => {
         this.pharmacyList = r.data.data
+        this.$get('/cos/staff-info/selectStaffByUserId', {userId: this.currentUser.userId}).then((r) => {
+          let staffInfo = r.data.data
+          if (staffInfo !== null && staffInfo !== undefined) {
+            setTimeout(() => {
+              let obj = {}
+              obj['pharmacyId'] = staffInfo.pharmacyId
+              obj['staffId'] = staffInfo.id
+              this.pharmacyCheck(staffInfo.pharmacyId)
+              this.form.setFieldsValue(obj)
+              console.log(this.form.getFieldsValue())
+            }, 500)
+          }
+        })
       })
     },
     handlerClosed (localPoint) {

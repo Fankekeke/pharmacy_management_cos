@@ -42,7 +42,7 @@ public class StaffInfoController {
 
     @GetMapping("/selectStaffByUserId")
     public R selectStaffByUserId(Integer userId) {
-        return R.ok(staffInfoService.list(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, userId)));
+        return R.ok(staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, userId)));
     }
 
     /**
@@ -74,7 +74,7 @@ public class StaffInfoController {
      */
     @GetMapping("/list/{pharmacyId}")
     public R selectStaffByPharmacy(@PathVariable("pharmacyId") Integer pharmacyId) {
-        return R.ok(staffInfoService.list(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getPharmacyId, pharmacyId)));
+        return R.ok(staffInfoService.list(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getPharmacyId, pharmacyId).eq(StaffInfo::getStatus, 1)));
     }
 
     /**
@@ -98,7 +98,7 @@ public class StaffInfoController {
         staffInfo.setCode("STF-" + System.currentTimeMillis());
         staffInfo.setName(StrUtil.cleanBlank(staffInfo.getName()));
         staffInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
-        userService.registStaff(staffInfo.getCode(), "123456", staffInfo);
+        userService.registStaff(staffInfo.getCode(), "1234qwer", staffInfo);
         return R.ok(true);
     }
 
