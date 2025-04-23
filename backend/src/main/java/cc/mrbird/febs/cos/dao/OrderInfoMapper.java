@@ -41,21 +41,21 @@ public interface OrderInfoMapper extends BaseMapper<OrderInfo> {
      *
      * @return 结果
      */
-    BigDecimal selectOrderPrice();
+    BigDecimal selectOrderPrice(Integer pharmacyId);
 
     /**
      * 获取本月订单信息
      *
      * @return 结果
      */
-    List<OrderInfo> selectOrderByMonth();
+    List<OrderInfo> selectOrderByMonth(Integer pharmacyId);
 
     /**
      * 获取本年订单信息
      *
      * @return 结果
      */
-    List<OrderInfo> selectOrderByYear();
+    List<OrderInfo> selectOrderByYear(Integer pharmacyId);
 
     /**
      * 十天内订单数量统计

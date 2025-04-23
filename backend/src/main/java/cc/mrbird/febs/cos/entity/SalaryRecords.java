@@ -122,4 +122,7 @@ public class SalaryRecords implements Serializable {
     @TableField(exist = false)
     private Integer pharmacyId;
 
+    @TableField(exist = false)
+    private Integer staffId;
+
 }

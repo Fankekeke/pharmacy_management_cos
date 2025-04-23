@@ -270,7 +270,7 @@ export default {
   },
   methods: {
     selectHomeData () {
-      this.$get('/cos/pharmacy-info/home/data').then((r) => {
+      this.$get('/cos/pharmacy-info/home/data', {userId: this.user.roleId == 76 ? this.user.userId : null}).then((r) => {
         let titleData = { orderCode: r.data.orderCode, orderPrice: r.data.orderPrice, pharmacyNum: r.data.pharmacyNum, staffNum: r.data.staffNum }
         this.$emit('setTitle', titleData)
         this.titleData.monthOrderNum = r.data.monthOrderNum

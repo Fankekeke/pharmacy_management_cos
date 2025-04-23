@@ -84,7 +84,7 @@ public interface IPharmacyInfoService extends IService<PharmacyInfo> {
      *
      * @return 结果
      */
-    LinkedHashMap<String, Object> homeData();
+    LinkedHashMap<String, Object> homeData(Integer userId);
 
     /**
      * 根据月份获取药品统计情况

@@ -42,6 +42,9 @@
         <if test="salaryRecords.pharmacyId != null">
             AND pi.user_id = #{salaryRecords.pharmacyId}
         </if>
+        <if test="salaryRecords.staffId != null">
+            AND si.user_id = #{salaryRecords.staffId}
+        </if>
         ORDER BY sr.year DESC, sr.month DESC, sr.payroll DESC
     </select>
 

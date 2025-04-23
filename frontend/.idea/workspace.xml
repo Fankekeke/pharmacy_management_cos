@@ -23,17 +23,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b51975f-5e37-45a1-bd9d-0f3c12f944d0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/OrderDetailMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/OrderDetailMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/PharmacyInfoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/PharmacyInfoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/service/IPharmacyInfoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/service/IPharmacyInfoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/service/impl/PharmacyInfoServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/service/impl/PharmacyInfoServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/merchant/detail/Detail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/detail/Detail.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/merchant/inventory/Inventory.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/inventory/Inventory.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/merchant/order/Order.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/order/Order.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/merchant/personal/Personal.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/personal/Personal.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/merchant/position/Staff.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/position/Staff.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/merchant/salaryRecords/SalaryRecords.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/salaryRecords/SalaryRecords.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/merchant/staff/Staff.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/staff/Staff.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/merchant/statistics/Statistics.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/statistics/Statistics.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/merchant/stock/Stock.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/stock/Stock.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/HomePage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/HomePage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/manage/component/home/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/component/home/Home.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/work/order/Order.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/work/order/Order.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/work/salaryRecords/SalaryRecords.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/work/salaryRecords/SalaryRecords.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -257,7 +254,7 @@
       <workItem from="1701691597250" duration="5137000" />
       <workItem from="1745280878424" duration="1267000" />
       <workItem from="1745332210910" duration="3782000" />
-      <workItem from="1745378508250" duration="2294000" />
+      <workItem from="1745378508250" duration="4981000" />
     </task>
     <servers />
   </component>

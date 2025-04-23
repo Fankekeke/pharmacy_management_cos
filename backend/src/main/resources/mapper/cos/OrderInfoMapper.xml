@@ -88,6 +88,10 @@
     <!-- 查询总收益 -->
     <select id="selectOrderPrice" resultType="java.math.BigDecimal">
         SELECT IFNULL(SUM(oi.total_cost), 0) FROM order_info oi
+        WHERE 1 = 1
+        <if test="pharmacyId != null">
+            AND oi.pharmacy_id = #{pharmacyId}
+        </if>
     </select>
 
     <!-- 订单销售药品类别统计 -->
@@ -200,6 +204,9 @@
         DATE_FORMAT( oi.create_date, '%Y%m' ) = DATE_FORMAT(
         CURDATE(),
         '%Y%m')
+        <if test="pharmacyId != null">
+            AND oi.pharmacy_id = #{pharmacyId}
+        </if>
     </select>
 
     <!-- 获取本年订单信息 -->
@@ -224,6 +231,9 @@
         DATE_FORMAT( oi.create_date, '%Y' ) = DATE_FORMAT(
         CURDATE(),
         '%Y')
+        <if test="pharmacyId != null">
+            AND oi.pharmacy_id = #{pharmacyId}
+        </if>
     </select>
 
     <!-- 获取用户订单物流 -->

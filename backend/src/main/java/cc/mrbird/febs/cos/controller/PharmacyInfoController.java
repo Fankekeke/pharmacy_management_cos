@@ -96,8 +96,8 @@ public class PharmacyInfoController {
      * @return 结果
      */
     @GetMapping("/home/data")
-    public R selectHomeData() {
-        return R.ok(pharmacyInfoService.homeData());
+    public R selectHomeData(@RequestParam(value = "userId", required = false) Integer userId) {
+        return R.ok(pharmacyInfoService.homeData(userId));
     }
 
     /**

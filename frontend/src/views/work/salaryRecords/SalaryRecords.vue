@@ -376,6 +376,7 @@ export default {
       if (params.month === undefined) {
         delete params.month
       }
+      params.staffId = this.currentUser.userId
       this.$get('/cos/salary-records/page', {
         ...params
       }).then((r) => {

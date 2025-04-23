@@ -40,6 +40,11 @@ public class StaffInfoController {
         return R.ok(staffInfoService.selectStaffPage(page, staffInfo));
     }
 
+    @GetMapping("/selectStaffByUserId")
+    public R selectStaffByUserId(Integer userId) {
+        return R.ok(staffInfoService.list(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, userId)));
+    }
+
     /**
      * 获取详情信息
      *

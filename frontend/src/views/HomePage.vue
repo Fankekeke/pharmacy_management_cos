@@ -18,7 +18,7 @@
         </a-col>
         <a-col :span="12">
           <div>
-            <a-row class="more-info" v-if="user.roleId == 74">
+            <a-row class="more-info" v-if="user.roleId == 74 || user.roleId == 76">
               <a-col :span="4"></a-col>
               <a-col :span="4"></a-col>
               <a-col :span="4">
@@ -27,7 +27,7 @@
               <a-col :span="4">
                 <head-info title="总收益" :content="titleData.orderPrice" :center="false" :bordered="false"/>
               </a-col>
-              <a-col :span="4">
+              <a-col :span="4" v-if="user.roleId == 74">
                 <head-info title="店铺数量" :content="titleData.pharmacyNum" :center="false" :bordered="false"/>
               </a-col>
               <a-col :span="4">

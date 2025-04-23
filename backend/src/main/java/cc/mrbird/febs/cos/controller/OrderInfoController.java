@@ -4,9 +4,11 @@ package cc.mrbird.febs.cos.controller;
 import cc.mrbird.febs.common.exception.FebsException;
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.OrderInfo;
+import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.entity.vo.OrderDetailVo;
 import cc.mrbird.febs.cos.entity.vo.OrderInfoVo;
 import cc.mrbird.febs.cos.service.IOrderInfoService;
+import cc.mrbird.febs.cos.service.IStaffInfoService;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,8 @@ public class OrderInfoController {
 
     private final IOrderInfoService orderInfoService;
 
+    private final IStaffInfoService staffInfoService;
+
     /**
      * 分页获取订单信息
      *
@@ -34,6 +38,12 @@ public class OrderInfoController {
      */
     @GetMapping("/page")
     public R page(Page<OrderInfo> page, OrderInfo orderInfo) {
+        if (orderInfo.getStaffId() != null) {
+            StaffInfo staff = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getCode, orderInfo.getStaffId()));
+            if (staff != null) {
+                orderInfo.setPharmacyId(staff.getPharmacyId());
+            }
+        }
         return R.ok(orderInfoService.selectOrderPage(page, orderInfo));
     }
 

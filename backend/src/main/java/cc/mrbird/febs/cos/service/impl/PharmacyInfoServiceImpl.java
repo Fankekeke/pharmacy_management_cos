@@ -121,7 +121,7 @@ public class PharmacyInfoServiceImpl extends ServiceImpl<PharmacyInfoMapper, Pha
         // 所有药店信息
         List<PharmacyInfo> pharmacyInfoList = this.list(Wrappers.<PharmacyInfo>lambdaQuery().eq(PharmacyInfo::getBusinessStatus, 1));
         // 本月订单数据
-        List<OrderInfo> orderInfoList = orderInfoMapper.selectOrderByMonth();
+        List<OrderInfo> orderInfoList = orderInfoMapper.selectOrderByMonth(null);
         if (CollectionUtil.isEmpty(orderInfoList) || CollectionUtil.isEmpty(pharmacyInfoList)) {
             return Collections.emptyList();
         }
@@ -311,26 +311,32 @@ public class PharmacyInfoServiceImpl extends ServiceImpl<PharmacyInfoMapper, Pha
      * @return 结果
      */
     @Override
-    public LinkedHashMap<String, Object> homeData() {
+    public LinkedHashMap<String, Object> homeData(Integer userId) {
+        // 获取商家信息
+        PharmacyInfo pharmacyInfo = this.getOne(Wrappers.<PharmacyInfo>lambdaQuery().eq(PharmacyInfo::getUserId, userId));
+        Integer pharmacyId = null;
+        if (pharmacyInfo != null) {
+            pharmacyId = pharmacyInfo.getId();
+        }
         LinkedHashMap<String, Object> result = new LinkedHashMap<>();
         // 总订单数量
-        result.put("orderCode", orderInfoService.count());
+        result.put("orderCode", orderInfoService.count(Wrappers.<OrderInfo>lambdaQuery().eq(pharmacyId != null, OrderInfo::getPharmacyId, pharmacyId)));
         // 总收益
-        result.put("orderPrice", orderInfoMapper.selectOrderPrice());
+        result.put("orderPrice", orderInfoMapper.selectOrderPrice(pharmacyId));
         // 店铺数量
         result.put("pharmacyNum", pharmacyInfoMapper.selectCount(Wrappers.<PharmacyInfo>lambdaQuery().eq(PharmacyInfo::getBusinessStatus, 1)));
         // 员工数量
-        result.put("staffNum", staffInfoService.count(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getStatus, 1)));
+        result.put("staffNum", staffInfoService.count(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getStatus, 1).eq(pharmacyId != null, StaffInfo::getPharmacyId, pharmacyId)));
 
         // 本月订单数量
-        List<OrderInfo> orderList = orderInfoMapper.selectOrderByMonth();
+        List<OrderInfo> orderList = orderInfoMapper.selectOrderByMonth(pharmacyId);
         result.put("monthOrderNum", CollectionUtil.isEmpty(orderList) ? 0 : orderList.size());
         BigDecimal orderPrice = orderList.stream().map(OrderInfo::getTotalCost).reduce(BigDecimal.ZERO, BigDecimal::add);
         // 获取本月收益
         result.put("monthOrderPrice", orderPrice);
 
         // 本年订单数量
-        List<OrderInfo> orderYearList = orderInfoMapper.selectOrderByYear();
+        List<OrderInfo> orderYearList = orderInfoMapper.selectOrderByYear(pharmacyId);
         result.put("yearOrderNum", CollectionUtil.isEmpty(orderYearList) ? 0 : orderYearList.size());
         // 本年总收益
         BigDecimal orderYearPrice = orderYearList.stream().map(OrderInfo::getTotalCost).reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -340,9 +346,9 @@ public class PharmacyInfoServiceImpl extends ServiceImpl<PharmacyInfoMapper, Pha
         result.put("bulletin", bulletinInfoService.list(Wrappers.<BulletinInfo>lambdaQuery().eq(BulletinInfo::getRackUp, 1)));
 
         // 近十天内订单统计
-        result.put("orderNumWithinDays", orderInfoMapper.selectOrderNumWithinDays(null));
+        result.put("orderNumWithinDays", orderInfoMapper.selectOrderNumWithinDays(pharmacyId));
         // 近十天内收益统计
-        result.put("orderPriceWithinDays", orderInfoMapper.selectOrderPriceWithinDays(null));
+        result.put("orderPriceWithinDays", orderInfoMapper.selectOrderPriceWithinDays(pharmacyId));
         // 订单销售药品类别统计
         result.put("orderDrugType", orderInfoMapper.selectOrderDrugType());
         return result;
