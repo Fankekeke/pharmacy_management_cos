@@ -176,6 +176,7 @@ export default {
     'orderAddShow': function (value) {
       if (value) {
         this.dataList = []
+        this.getPharmacy()
       }
     }
   },

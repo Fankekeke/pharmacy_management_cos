@@ -4,10 +4,12 @@ package cc.mrbird.febs.cos.controller;
 import cc.mrbird.febs.common.exception.FebsException;
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.OrderInfo;
+import cc.mrbird.febs.cos.entity.PharmacyInfo;
 import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.entity.vo.OrderDetailVo;
 import cc.mrbird.febs.cos.entity.vo.OrderInfoVo;
 import cc.mrbird.febs.cos.service.IOrderInfoService;
+import cc.mrbird.febs.cos.service.IPharmacyInfoService;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -29,6 +31,8 @@ public class OrderInfoController {
 
     private final IStaffInfoService staffInfoService;
 
+    private final IPharmacyInfoService pharmacyInfoService;
+
     /**
      * 分页获取订单信息
      *
@@ -39,9 +43,10 @@ public class OrderInfoController {
     @GetMapping("/page")
     public R page(Page<OrderInfo> page, OrderInfo orderInfo) {
         if (orderInfo.getStaffId() != null) {
-            StaffInfo staff = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getCode, orderInfo.getStaffId()));
+            StaffInfo staff = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, orderInfo.getStaffId()));
             if (staff != null) {
-                orderInfo.setPharmacyId(staff.getPharmacyId());
+                PharmacyInfo pharmacy = pharmacyInfoService.getOne(Wrappers.<PharmacyInfo>lambdaQuery().eq(PharmacyInfo::getId, staff.getPharmacyId()));
+                orderInfo.setPharmacyId(pharmacy.getUserId());
             }
         }
         return R.ok(orderInfoService.selectOrderPage(page, orderInfo));
