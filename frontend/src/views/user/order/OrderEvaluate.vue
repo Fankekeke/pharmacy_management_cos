@@ -162,7 +162,7 @@ export default {
           </a-popover>
         }
       }, {
-        title: '单价',
+        title: '售价',
         dataIndex: 'unitPrice'
       }]
     }

@@ -26,13 +26,6 @@
       </a-row>
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
-        <a-col :span="8"><b>所属分类：</b>
-          <span v-if="drugInfo.category == 1">可卡因</span>
-          <span v-if="drugInfo.category == 2">维生素制剂</span>
-          <span v-if="drugInfo.category == 3">鱼肝油</span>
-          <span v-if="drugInfo.category == 4">药物饮料</span>
-          <span v-if="drugInfo.category == 5">膳食纤维</span>
-        </a-col>
         <a-col :span="8"><b>药品类别：</b>
           <span v-if="drugInfo.classification == 1">中药材</span>
           <span v-if="drugInfo.classification == 2">中药饮片</span>
@@ -90,7 +83,7 @@
       </a-row>
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
-        <a-col :span="8"><b>单价：</b>
+        <a-col :span="8"><b>售价：</b>
           {{ drugInfo.unitPrice }} 元
         </a-col>
         <a-col :span="8"><b>创建时间：</b>

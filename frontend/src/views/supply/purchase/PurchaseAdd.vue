@@ -152,7 +152,7 @@ export default {
         dataIndex: 'dosageForm',
         scopedSlots: {customRender: 'dosageFormShow'}
       }, {
-        title: '单价',
+        title: '采购价',
         dataIndex: 'unitPrice',
         scopedSlots: {customRender: 'priceShow'}
       }]
@@ -194,7 +194,7 @@ export default {
             record.brand = e.brand
             record.classification = e.classification
             record.dosageForm = e.dosageForm
-            record.unitPrice = e.unitPrice
+            record.unitPrice = e.putPrice
             record.drugId = e.id
             console.log(record)
           }

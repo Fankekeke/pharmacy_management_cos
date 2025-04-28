@@ -168,7 +168,7 @@ export default {
           }
         }
       }, {
-        title: '单价',
+        title: '售价',
         dataIndex: 'unitPrice',
         customRender: (text, row, index) => {
           if (text !== null) {

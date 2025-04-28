@@ -179,25 +179,6 @@ export default {
           }
         }
       }, {
-        title: '所属分类',
-        dataIndex: 'category',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case 1:
-              return <a-tag>可卡因</a-tag>
-            case 2:
-              return <a-tag>维生素制剂</a-tag>
-            case 3:
-              return <a-tag>鱼肝油</a-tag>
-            case 4:
-              return <a-tag>药物饮料</a-tag>
-            case 5:
-              return <a-tag>膳食纤维</a-tag>
-            default:
-              return '- -'
-          }
-        }
-      }, {
         title: '保质期',
         dataIndex: 'startDate',
         customRender: (text, row, index) => {

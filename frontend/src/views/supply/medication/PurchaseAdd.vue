@@ -163,7 +163,7 @@ export default {
         dataIndex: 'dosageForm',
         scopedSlots: {customRender: 'dosageFormShow'}
       }, {
-        title: '单价',
+        title: '售价',
         dataIndex: 'unitPrice',
         scopedSlots: {customRender: 'priceShow'}
       }]

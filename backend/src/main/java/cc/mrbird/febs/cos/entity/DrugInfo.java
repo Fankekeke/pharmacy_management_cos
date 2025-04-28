@@ -118,5 +118,10 @@ public class DrugInfo implements Serializable {
      */
     private String images;
 
+    /**
+     * 采购单价
+     */
+    private BigDecimal putPrice;
+
 
 }
