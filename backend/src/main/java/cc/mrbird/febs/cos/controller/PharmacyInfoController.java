@@ -6,6 +6,7 @@ import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.PharmacyInfo;
 import cc.mrbird.febs.cos.service.IPharmacyInfoService;
 import cc.mrbird.febs.system.service.UserService;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -14,10 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author FanK
@@ -41,6 +39,58 @@ public class PharmacyInfoController {
     @GetMapping("/page")
     public R page(Page<PharmacyInfo> page, PharmacyInfo pharmacyInfo) {
         return R.ok(pharmacyInfoService.selectPharmacyPage(page, pharmacyInfo));
+    }
+
+    /**
+     * 查询可调配的药店信息
+     *
+     * @return 列表
+     */
+    @GetMapping("/queryPharmacyAllocate")
+    public R queryPharmacyAllocate(Integer pharmacyId) {
+        List<PharmacyInfo> pharmacyList = pharmacyInfoService.list(Wrappers.<PharmacyInfo>lambdaQuery()
+                .eq(PharmacyInfo::getBusinessStatus, 1)
+                .ne(PharmacyInfo::getId, pharmacyId));
+
+        if (CollectionUtil.isEmpty(pharmacyList)) {
+            return R.ok(Collections.emptyList());
+        }
+
+        PharmacyInfo currentPharmacy = pharmacyInfoService.getById(pharmacyId);
+        if (currentPharmacy == null || currentPharmacy.getLatitude() == null || currentPharmacy.getLongitude() == null) {
+            return R.ok(Collections.emptyList());
+        }
+
+        // 获取当前药店的经纬度
+        Double centerLat = currentPharmacy.getLatitude().doubleValue();
+        Double centerLng = currentPharmacy.getLongitude().doubleValue();
+
+        // 筛选出30公里范围内的药店
+        List<PharmacyInfo> nearbyPharmacies = new ArrayList<>();
+        for (PharmacyInfo pharmacy : pharmacyList) {
+            if (pharmacy.getLatitude() != null && pharmacy.getLongitude() != null) {
+                double distance = calculateDistance(centerLat, centerLng,
+                        pharmacy.getLatitude().doubleValue(), pharmacy.getLongitude().doubleValue());
+                if (distance <= 30) {
+                    pharmacy.setDistance(distance);
+                    nearbyPharmacies.add(pharmacy);
+                }
+            }
+        }
+        // 按距离排序
+        nearbyPharmacies.sort(Comparator.comparingDouble(PharmacyInfo::getDistance));
+        return R.ok(nearbyPharmacies);
+    }
+
+    private double calculateDistance(double lat1, double lng1, double lat2, double lng2) {
+        final double EARTH_RADIUS = 6371;
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lngDistance = Math.toRadians(lng2 - lng1);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lngDistance / 2) * Math.sin(lngDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return EARTH_RADIUS * c;
     }
 
     /**

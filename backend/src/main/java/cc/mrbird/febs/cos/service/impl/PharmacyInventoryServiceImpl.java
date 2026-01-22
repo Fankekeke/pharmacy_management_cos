@@ -55,6 +55,7 @@ public class PharmacyInventoryServiceImpl extends ServiceImpl<PharmacyInventoryM
         return baseMapper.selectPharmacyDrugList(key);
     }
 
+
     /**
      * 批量设置库房库存
      * @param pharmacyId 参数
