@@ -1,8 +1,10 @@
 package cc.mrbird.febs.cos.controller;
 
 
+import cc.mrbird.febs.common.exception.FebsException;
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.PharmacyInventory;
+import cc.mrbird.febs.cos.entity.vo.Dispatch;
 import cc.mrbird.febs.cos.entity.vo.InventoryVo;
 import cc.mrbird.febs.cos.service.IPharmacyInventoryService;
 import cn.hutool.core.date.DateUnit;
@@ -74,6 +76,17 @@ public class PharmacyInventoryController {
     @PostMapping("/batch/put")
     public R batchPutInventory(@RequestParam("pharmacyId") Integer pharmacyId, @RequestParam("pharmacyInventoryList") String pharmacyInventoryList) throws Exception {
         return R.ok(pharmacyInventoryService.batchPutInventory(pharmacyId, pharmacyInventoryList));
+    }
+
+    /**
+     * 药品调拨
+     *
+     * @param dispatch 参数
+     * @return 结果
+     */
+    @PostMapping("/dispatch")
+    public R drugDispatch(Dispatch dispatch) throws FebsException {
+        return R.ok(pharmacyInventoryService.drugDispatch(dispatch));
     }
 
     /**

@@ -1,6 +1,8 @@
 package cc.mrbird.febs.cos.service;
 
+import cc.mrbird.febs.common.exception.FebsException;
 import cc.mrbird.febs.cos.entity.PharmacyInventory;
+import cc.mrbird.febs.cos.entity.vo.Dispatch;
 import cc.mrbird.febs.cos.entity.vo.InventoryVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -40,6 +42,14 @@ public interface IPharmacyInventoryService extends IService<PharmacyInventory> {
      * @throws Exception 异常
      */
     boolean batchPutInventory(Integer pharmacyId, String pharmacyInventoryList) throws Exception;
+
+    /**
+     * 药品调拨
+     *
+     * @param dispatch 参数
+     * @return 结果
+     */
+    boolean drugDispatch(Dispatch dispatch) throws FebsException;
 
     /**
      * 根据药房ID获取库存信息

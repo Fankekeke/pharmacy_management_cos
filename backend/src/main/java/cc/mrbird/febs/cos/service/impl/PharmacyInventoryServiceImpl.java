@@ -2,8 +2,11 @@ package cc.mrbird.febs.cos.service.impl;
 
 import cc.mrbird.febs.common.exception.FebsException;
 import cc.mrbird.febs.cos.entity.InventoryStatistics;
+import cc.mrbird.febs.cos.entity.OrderDetail;
 import cc.mrbird.febs.cos.entity.PharmacyInventory;
 import cc.mrbird.febs.cos.dao.PharmacyInventoryMapper;
+import cc.mrbird.febs.cos.entity.vo.Dispatch;
+import cc.mrbird.febs.cos.entity.vo.DispatchItem;
 import cc.mrbird.febs.cos.entity.vo.InventoryVo;
 import cc.mrbird.febs.cos.service.IInventoryStatisticsService;
 import cc.mrbird.febs.cos.service.IPharmacyInventoryService;
@@ -103,6 +106,98 @@ public class PharmacyInventoryServiceImpl extends ServiceImpl<PharmacyInventoryM
         inventoryStatisticsService.saveBatch(statisticsList);
         return this.saveOrUpdateBatch(batchData);
     }
+
+    /**
+     * 药品调拨
+     *
+     * @param dispatch 参数
+     * @return 结果
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public boolean drugDispatch(Dispatch dispatch) throws FebsException {
+        if (StrUtil.isEmpty(dispatch.getMedicines())) {
+            throw new FebsException("调拨药品不能为空");
+        }
+        List<DispatchItem> dispatchItemList = JSONUtil.toList(dispatch.getMedicines(), DispatchItem.class);
+        // 被调拨药店库存添加
+        this.putInventory(dispatchItemList, dispatch.getTargetPharmacyId());
+        // 源药店库存减少
+        this.outInventory(dispatchItemList, dispatch.getSourcePharmacyId());
+        return true;
+    }
+
+    /**
+     * 批量设置库存
+     *
+     * @param dispatchItemList 列表
+     * @param pharmacyId       药房ID
+     */
+    public void putInventory(List<DispatchItem> dispatchItemList, Integer pharmacyId) {
+        List<Integer> drugIds = dispatchItemList.stream().map(DispatchItem::getMedicineId).filter(Objects::nonNull).collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(drugIds)) {
+            return;
+        }
+        // 根据药品编号查询库存
+        List<PharmacyInventory> pharmacyInventoryList = this.list(Wrappers.<PharmacyInventory>lambdaQuery().eq(PharmacyInventory::getPharmacyId, pharmacyId).in(PharmacyInventory::getDrugId, drugIds));
+        // 转MAP
+        Map<Integer, PharmacyInventory> inventoryMap = pharmacyInventoryList.stream().collect(Collectors.toMap(PharmacyInventory::getDrugId, e -> e));
+        List<PharmacyInventory> batchData = new ArrayList<>();
+        List<InventoryStatistics> statisticsList = new ArrayList<>();
+        for (DispatchItem pharmacyInventoryVo : dispatchItemList) {
+            InventoryStatistics inventoryStatistics = new InventoryStatistics();
+            inventoryStatistics.setDrugId(pharmacyInventoryVo.getMedicineId());
+            inventoryStatistics.setPharmacyId(pharmacyId);
+            inventoryStatistics.setQuantity(pharmacyInventoryVo.getQuantity());
+            inventoryStatistics.setCreateDate(DateUtil.formatDateTime(new Date()));
+            inventoryStatistics.setStorageType(2);
+            statisticsList.add(inventoryStatistics);
+
+            PharmacyInventory item = inventoryMap.get(pharmacyInventoryVo.getMedicineId());
+            if (item == null || item.getDrugId() == null) {
+                item = new PharmacyInventory();
+                item.setPharmacyId(pharmacyId);
+                item.setShelfStatus(1);
+                item.setDrugId(pharmacyInventoryVo.getMedicineId());
+                item.setReserve(pharmacyInventoryVo.getQuantity());
+            } else {
+                item.setReserve(item.getReserve() + pharmacyInventoryVo.getQuantity());
+            }
+            batchData.add(item);
+        }
+        inventoryStatisticsService.saveBatch(statisticsList);
+        this.saveOrUpdateBatch(batchData);
+    }
+
+    /**
+     * 批量出库
+     *
+     * @param dispatchItemList 列表
+     * @param pharmacyId       药房ID
+     */
+    public void outInventory(List<DispatchItem> dispatchItemList, Integer pharmacyId) {
+        // 订单详情
+        Map<Integer, Integer> detailMap = dispatchItemList.stream().collect(Collectors.toMap(DispatchItem::getMedicineId, DispatchItem::getQuantity));
+        // 根据药品ID获取库存信息
+        List<PharmacyInventory> inventoryList = this.list(Wrappers.<PharmacyInventory>lambdaQuery().in(PharmacyInventory::getDrugId, detailMap.keySet()).eq(PharmacyInventory::getPharmacyId, pharmacyId));
+        List<InventoryStatistics> statisticsList = new ArrayList<>();
+
+        inventoryList.forEach(e -> {
+            e.setReserve(e.getReserve() - detailMap.get(e.getDrugId()));
+            InventoryStatistics inventoryStatistics = new InventoryStatistics();
+            inventoryStatistics.setDrugId(e.getDrugId());
+            inventoryStatistics.setPharmacyId(e.getPharmacyId());
+            inventoryStatistics.setQuantity(e.getReserve());
+            inventoryStatistics.setStorageType(1);
+            inventoryStatistics.setCreateDate(DateUtil.formatDateTime(new Date()));
+            statisticsList.add(inventoryStatistics);
+        });
+        // 修改库存信息
+        this.updateBatchById(inventoryList);
+        // 添加库房统计
+        inventoryStatisticsService.saveBatch(statisticsList);
+    }
+
 
     /**
      * 根据药房ID获取库存信息
