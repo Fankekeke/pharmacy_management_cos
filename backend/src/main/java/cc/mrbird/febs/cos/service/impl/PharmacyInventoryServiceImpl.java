@@ -121,9 +121,9 @@ public class PharmacyInventoryServiceImpl extends ServiceImpl<PharmacyInventoryM
         }
         List<DispatchItem> dispatchItemList = JSONUtil.toList(dispatch.getMedicines(), DispatchItem.class);
         // 被调拨药店库存添加
-        this.putInventory(dispatchItemList, dispatch.getTargetPharmacyId());
+        this.putInventory(dispatchItemList, dispatch.getSourcePharmacyId());
         // 源药店库存减少
-        this.outInventory(dispatchItemList, dispatch.getSourcePharmacyId());
+        this.outInventory(dispatchItemList, dispatch.getTargetPharmacyId());
         return true;
     }
 

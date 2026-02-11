@@ -25,10 +25,10 @@
                 </a-form-item>
               </a-col>
               <a-col :span="24">
-                <a-form-item label='收获地址' v-bind="formItemLayout">
+                <a-form-item label='收货地址' v-bind="formItemLayout">
                   <a-input v-decorator="[
                   'address',
-                  { rules: [{ required: true, message: '请输入收获地址!' }] }
+                  { rules: [{ required: true, message: '请输入收货地址!' }] }
                   ]"/>
                 </a-form-item>
               </a-col>

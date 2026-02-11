@@ -22,28 +22,26 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2b51975f-5e37-45a1-bd9d-0f3c12f944d0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/views/work/drug/Drug.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/work/drug/DrugAdd.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/work/drug/DrugEdit.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/work/drug/DrugView.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/common/generator/CodeGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/common/generator/CodeGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/PharmacyInfoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/PharmacyInfoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/StaffInfoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/StaffInfoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/dao/OrderInfoMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/dao/OrderInfoMapper.java" afterDir="false" />
+    <list default="true" id="2b51975f-5e37-45a1-bd9d-0f3c12f944d0" name="Default Changelist" comment="Default Changelist">
       <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/service/impl/OrderInfoServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/service/impl/OrderInfoServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/service/impl/PharmacyInventoryServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/service/impl/PharmacyInventoryServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/config/alipay.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/resources/config/alipay.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/manage/order/Order.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/order/Order.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/manage/order/OrderAdd.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/order/OrderAdd.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/merchant/order/OrderAdd.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/order/OrderAdd.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/merchant/personal/Personal.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/personal/Personal.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/merchant/salaryRecords/SalaryRecordsAdd.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/salaryRecords/SalaryRecordsAdd.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/merchant/staff/StaffAdd.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/staff/StaffAdd.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/merchant/stock/InventoryAdd.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/stock/InventoryAdd.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/statistics/rank/Rank.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/statistics/rank/Rank.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/work/order/OrderAdd.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/work/order/OrderAdd.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/work/personal/Personal.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/work/personal/Personal.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/work/salaryRecords/SalaryRecords.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/work/salaryRecords/SalaryRecords.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/manage/deploy/Deploy.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/deploy/Deploy.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/manage/detail/Detail-Back.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/detail/Detail-Back.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/manage/logistics/Logistics.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/logistics/Logistics.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/manage/position/Staff.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/position/Staff.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/manage/staff/Staff.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/staff/Staff.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/manage/user/User.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/user/User.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/merchant/detail/Detail-Back.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/detail/Detail-Back.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/merchant/position/Staff.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/position/Staff.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/merchant/staff/Staff.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/staff/Staff.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/service/user/User.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/service/user/User.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/supply/medication/Medication.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/supply/medication/Medication.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/user/medication/Medication.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/user/medication/Medication.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/user/order/Order.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/user/order/Order.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/user/order/OrderEvaluate.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/user/order/OrderEvaluate.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/user/personal/Personal.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/user/personal/Personal.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,21 +101,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "G:/Project/20250422连锁药店管理系统/pharmacy_management_cos/frontend/src/views/work",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "yarn",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;G:/Project/20250422连锁药店管理系统/pharmacy_management_cos/frontend&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="G:\Project\20250422连锁药店管理系统\pharmacy_management_cos\frontend\src\views\work" />
@@ -268,7 +266,14 @@
       <workItem from="1745280878424" duration="1267000" />
       <workItem from="1745332210910" duration="3782000" />
       <workItem from="1745378508250" duration="4981000" />
-      <workItem from="1745415445384" duration="9252000" />
+      <workItem from="1745415445384" duration="9368000" />
+      <workItem from="1745677134010" duration="194000" />
+      <workItem from="1745756042643" duration="750000" />
+      <workItem from="1745847752581" duration="5155000" />
+      <workItem from="1754748778144" duration="516000" />
+      <workItem from="1770535528536" duration="7107000" />
+      <workItem from="1770631386858" duration="3967000" />
+      <workItem from="1770818648392" duration="2008000" />
     </task>
     <servers />
   </component>

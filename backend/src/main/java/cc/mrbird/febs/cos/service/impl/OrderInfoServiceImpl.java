@@ -104,7 +104,6 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
             this.orderPaymentPlatform(orderInfo.getCode(), orderInfoVo.getStaffCode());
         }
         // 重新更新订单信息
-
         return result;
     }
 
@@ -158,10 +157,10 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         }
         // 获取订单信息
         OrderInfo orderInfo = this.getOne(Wrappers.<OrderInfo>lambdaQuery().eq(OrderInfo::getCode, orderCode));
-        if (StrUtil.isEmpty(staffCode)) {
-            List<StaffInfo> staffInfoList = staffInfoMapper.selectList(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getPharmacyId, orderInfo.getPharmacyId()));
-            staffCode = staffInfoList.get(0).getCode();
-        }
+//        if (StrUtil.isEmpty(staffCode)) {
+//            List<StaffInfo> staffInfoList = staffInfoMapper.selectList(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getPharmacyId, orderInfo.getPharmacyId()));
+//            staffCode = staffInfoList.get(0).getCode();
+//        }
         // 订单详情
         List<OrderDetail> detailList = orderDetailService.list(Wrappers.<OrderDetail>lambdaQuery().eq(OrderDetail::getOrderId, orderInfo.getId()));
         Map<Integer, Integer> detailMap = detailList.stream().collect(Collectors.toMap(OrderDetail::getDrugId, OrderDetail::getQuantity));
@@ -169,14 +168,13 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         List<PharmacyInventory> inventoryList = pharmacyInventoryService.list(Wrappers.<PharmacyInventory>lambdaQuery().in(PharmacyInventory::getDrugId, detailMap.keySet()).eq(PharmacyInventory::getPharmacyId, orderInfo.getPharmacyId()));
         List<InventoryStatistics> statisticsList = new ArrayList<>();
 
-        String finalStaffCode = staffCode;
         inventoryList.forEach(e -> {
             InventoryStatistics inventoryStatistics = new InventoryStatistics();
             inventoryStatistics.setDrugId(e.getDrugId());
             inventoryStatistics.setPharmacyId(e.getPharmacyId());
             inventoryStatistics.setQuantity(detailMap.get(e.getDrugId()));
             inventoryStatistics.setStorageType(1);
-            inventoryStatistics.setCustodian(finalStaffCode);
+            inventoryStatistics.setCustodian(staffCode);
             inventoryStatistics.setCreateDate(DateUtil.formatDateTime(new Date()));
             statisticsList.add(inventoryStatistics);
             e.setReserve(e.getReserve() - detailMap.get(e.getDrugId()));
@@ -192,7 +190,18 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         paymentRecord.setOrderCode(orderCode);
         paymentRecord.setUserId(orderInfo.getUserId());
         paymentRecordService.save(paymentRecord);
-        orderInfo.setOrderStatus(1);
+        if (StrUtil.isEmpty(staffCode)) {
+            logisticsInfoService.update(Wrappers.<LogisticsInfo>lambdaUpdate().set(LogisticsInfo::getCurrentLogistics, 0).eq(LogisticsInfo::getOrderId, orderInfo.getId()));
+            LogisticsInfo logisticsInfo = new LogisticsInfo();
+            logisticsInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+            logisticsInfo.setOrderId(orderInfo.getId());
+            logisticsInfo.setCurrentLogistics(1);
+            logisticsInfo.setRemark("订单" + orderInfo.getCode() + "已出库");
+            logisticsInfoService.save(logisticsInfo);
+            orderInfo.setOrderStatus(2);
+        } else {
+            orderInfo.setOrderStatus(3);
+        }
         this.updateById(orderInfo);
     }
 

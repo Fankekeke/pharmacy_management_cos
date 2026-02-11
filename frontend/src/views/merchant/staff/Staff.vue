@@ -173,7 +173,7 @@ export default {
         }
       }, {
         title: '是否为管理',
-        dataIndex: 'status',
+        dataIndex: 'isAdmin',
         customRender: (text, row, index) => {
           switch (text) {
             case 1:

@@ -39,7 +39,7 @@
     </div>
     <div>
       <div class="operator">
-        <a-button type="primary" ghost @click="add">新增</a-button>
+<!--        <a-button type="primary" ghost @click="add">新增</a-button>-->
       </div>
       <!-- 表格区域 -->
       <a-table ref="TableInfo"
@@ -157,7 +157,7 @@ export default {
         title: '联系方式',
         dataIndex: 'phone'
       }, {
-        title: '收获地址',
+        title: '收货地址',
         dataIndex: 'address'
       }, {
         title: '省份',
