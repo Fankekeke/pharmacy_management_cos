@@ -31,6 +31,7 @@
         ei.industry,
         ei.unit_description,
         ei.create_date,
+        ei.drug_production_license,
         ei.images
         from
         enterprise_info ei

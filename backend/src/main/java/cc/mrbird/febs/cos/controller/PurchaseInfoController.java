@@ -2,16 +2,21 @@ package cc.mrbird.febs.cos.controller;
 
 
 import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.cos.entity.PharmacyInventory;
 import cc.mrbird.febs.cos.entity.PurchaseInfo;
+import cc.mrbird.febs.cos.service.IPharmacyInventoryService;
 import cc.mrbird.febs.cos.service.IPurchaseInfoService;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author FanK
@@ -23,6 +28,8 @@ public class PurchaseInfoController {
 
     private final IPurchaseInfoService purchaseInfoService;
 
+    private final IPharmacyInventoryService pharmacyInventoryService;
+
     /**
      * 分页获取药品采购信息
      *
@@ -33,6 +40,55 @@ public class PurchaseInfoController {
     @GetMapping("/page")
     public R page(Page<PurchaseInfo> page, PurchaseInfo purchaseInfo) {
         return R.ok(purchaseInfoService.selectPurchasePage(page, purchaseInfo));
+    }
+
+    /**
+     * 查询采购列表
+     *
+     * @param pharmacyId 采购ID
+     * @param drugId     药品ID
+     * @return 结果
+     */
+    @GetMapping("/queryPurchaseList")
+    public R queryPurchaseList(Integer pharmacyId, Integer drugId) {
+        List<PurchaseInfo> purchaseInfoList = purchaseInfoService.list(Wrappers.<PurchaseInfo>lambdaQuery().eq(PurchaseInfo::getPharmacyId, pharmacyId));
+        if (CollectionUtil.isEmpty(purchaseInfoList)) {
+            return R.ok(Collections.emptyList());
+        }
+        List<Map> result = new ArrayList<>();
+        for (PurchaseInfo purchaseInfo : purchaseInfoList) {
+            List<PharmacyInventory> inventoryList = JSONUtil.toList(purchaseInfo.getPurchaseDrug(), PharmacyInventory.class);
+            List<PharmacyInventory> matchedRecords = inventoryList.stream().filter(inventory -> inventory.getDrugId().equals(drugId)).collect(Collectors.toList());
+            if (CollectionUtil.isEmpty(matchedRecords)) {
+                continue;
+            }
+            PharmacyInventory inventory = matchedRecords.get(0);
+            // 找到匹配的药品，记录相关信息
+            Map<String, Object> record = new HashMap<>();
+            record.put("drugId", inventory.getDrugId());
+            record.put("reserve", inventory.getReserve()); // 入库数量
+            record.put("purchaseCode", purchaseInfo.getCode()); // 采购单号
+            record.put("purchaser", purchaseInfo.getPurchaser()); // 采购人
+            record.put("purchaseDate", purchaseInfo.getCreateDate()); // 采购时间
+            result.add(record);
+        }
+        return R.ok(result);
+    }
+
+    /**
+     * 减库存
+     *
+     * @param pharmacyId 采购ID
+     * @param drugId     药品ID
+     * @param num        数量
+     * @return 结果
+     */
+    @GetMapping("/cancelStock")
+    public R cancelStock(Integer pharmacyId, Integer drugId, Integer num) {
+        PharmacyInventory pharmacyInventory = pharmacyInventoryService.getOne(Wrappers.<PharmacyInventory>lambdaQuery().eq(PharmacyInventory::getPharmacyId, pharmacyId).eq(PharmacyInventory::getDrugId, drugId));
+        Integer updateNum = pharmacyInventory.getReserve() - num;
+        pharmacyInventory.setReserve(updateNum < 0 ? 0 : updateNum);
+        return R.ok(pharmacyInventoryService.updateById(pharmacyInventory));
     }
 
     /**

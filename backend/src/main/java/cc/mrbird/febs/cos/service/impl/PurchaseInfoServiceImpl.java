@@ -59,7 +59,7 @@ public class PurchaseInfoServiceImpl extends ServiceImpl<PurchaseInfoMapper, Pur
         // 获取采购信息
         PurchaseInfo purchase = this.getById(id);
         purchase.setStatus(2);
-        inventoryService.batchPutInventory(purchase.getPharmacyId(), purchase.getPurchaseDrug());
+        inventoryService.batchPutInventory(purchase.getPharmacyId(), purchase.getPurchaseDrug(), purchase.getPurchaser());
 
         return this.updateById(purchase);
     }

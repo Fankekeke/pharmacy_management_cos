@@ -12,6 +12,7 @@
         ls.storage_type,
         ls.create_date,
         ls.custodian,
+        ls.custodian_fix,
         phi.name AS pharmacyName,
         phi.address,
         di.name AS drugName,

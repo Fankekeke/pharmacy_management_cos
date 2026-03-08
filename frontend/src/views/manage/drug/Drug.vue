@@ -195,6 +195,19 @@ export default {
           }
         }
       }, {
+        title: '处方药',
+        dataIndex: 'prescriptionFlag',
+        customRender: (text, row, index) => {
+          switch (text) {
+            case '0':
+              return <a-tag color="red">否</a-tag>
+            case '1':
+              return <a-tag color="green">是</a-tag>
+            default:
+              return '- -'
+          }
+        }
+      }, {
         title: '剂型',
         dataIndex: 'dosageForm',
         customRender: (text, row, index) => {

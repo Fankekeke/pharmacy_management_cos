@@ -152,6 +152,11 @@ public class EnterpriseInfo implements Serializable {
     private String createDate;
 
     /**
+     * 药品生产许可
+     */
+    private String drugProductionLicense;
+
+    /**
      * 企业照片
      */
     private String images;

@@ -67,7 +67,7 @@ public class PharmacyInventoryServiceImpl extends ServiceImpl<PharmacyInventoryM
      * @throws Exception 异常
      */
     @Override
-    public boolean batchPutInventory(Integer pharmacyId, String pharmacyInventorys) throws Exception {
+    public boolean batchPutInventory(Integer pharmacyId, String pharmacyInventorys, String purchaser) throws Exception {
         List<PharmacyInventory> inventoryList = JSONUtil.toList(pharmacyInventorys, PharmacyInventory.class);
         if (pharmacyId == null || CollectionUtil.isEmpty(inventoryList)) {
             throw new FebsException("所属药店和药品信息不能为空！");
@@ -89,6 +89,7 @@ public class PharmacyInventoryServiceImpl extends ServiceImpl<PharmacyInventoryM
             inventoryStatistics.setQuantity(pharmacyInventoryVo.getReserve());
             inventoryStatistics.setCreateDate(DateUtil.formatDateTime(new Date()));
             inventoryStatistics.setStorageType(2);
+            inventoryStatistics.setCustodianFix(purchaser);
             statisticsList.add(inventoryStatistics);
 
             PharmacyInventory item = inventoryMap.get(pharmacyInventoryVo.getDrugId());

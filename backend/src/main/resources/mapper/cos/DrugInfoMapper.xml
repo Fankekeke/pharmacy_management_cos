@@ -24,6 +24,7 @@
         unit_price,
         create_date,
         put_price,
+        prescription_flag,
         images
         from
         drug_info

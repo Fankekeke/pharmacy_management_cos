@@ -67,6 +67,10 @@
             <template slot="reserveShow" slot-scope="text, record">
               <a-input-number v-model="record.reserve" :min="1" :step="1"/>
             </template>
+            <template slot="prescriptionFlagShow" slot-scope="text, record">
+              <span v-if="record.prescriptionFlag == 0">非处方</span>
+              <span v-if="record.prescriptionFlag == 1">处方</span>
+            </template>
             <template slot="priceShow" slot-scope="text, record">
               <span>{{ record.unitPrice }}元</span>
             </template>
@@ -133,6 +137,10 @@ export default {
         dataIndex: 'reserve',
         scopedSlots: {customRender: 'reserveShow'}
       }, {
+        title: '处方药',
+        dataIndex: 'prescriptionFlag',
+        scopedSlots: {customRender: 'prescriptionFlagShow'}
+      }, {
         title: '所属品牌',
         dataIndex: 'brand',
         scopedSlots: {customRender: 'brandShow'}
@@ -180,6 +188,7 @@ export default {
             record.brand = e.brand
             record.classification = e.classification
             record.dosageForm = e.dosageForm
+            record.prescriptionFlag = e.prescriptionFlag
             record.unitPrice = e.putPrice
             record.drugId = e.id
             console.log(record)
@@ -197,7 +206,7 @@ export default {
       }
     },
     dataAdd () {
-      this.dataList.push({drugId: null, reserve: 1, brand: '', classification: '', dosageForm: '', unitPrice: ''})
+      this.dataList.push({drugId: null, reserve: 1, brand: '', classification: '', dosageForm: '', unitPrice: '', prescriptionFlag: ''})
     },
     getDrug () {
       this.$get('/cos/drug-info/list').then((r) => {

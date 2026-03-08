@@ -123,5 +123,10 @@ public class DrugInfo implements Serializable {
      */
     private BigDecimal putPrice;
 
+    /**
+     * 是否为处方药（0.否 1.是）
+     */
+    private String prescriptionFlag;
+
 
 }

@@ -136,6 +136,17 @@
           </a-form-item
           >
         </a-col>
+        <a-col :span="6">
+          <a-form-item label='是否为处方药' v-bind="formItemLayout">
+            <a-select v-decorator="[
+              'prescriptionFlag',
+              { rules: [{ required: true, message: '请选择是否为处方药!' }] }
+              ]">
+              <a-select-option value="1">是</a-select-option>
+              <a-select-option value="0">否</a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
         <a-col :span="24">
           <a-form-item label='药品图片' v-bind="formItemLayout">
             <a-upload

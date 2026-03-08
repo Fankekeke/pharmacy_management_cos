@@ -75,7 +75,7 @@ public class PharmacyInventoryController {
      */
     @PostMapping("/batch/put")
     public R batchPutInventory(@RequestParam("pharmacyId") Integer pharmacyId, @RequestParam("pharmacyInventoryList") String pharmacyInventoryList) throws Exception {
-        return R.ok(pharmacyInventoryService.batchPutInventory(pharmacyId, pharmacyInventoryList));
+        return R.ok(pharmacyInventoryService.batchPutInventory(pharmacyId, pharmacyInventoryList, "管理员"));
     }
 
     /**

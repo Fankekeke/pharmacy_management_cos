@@ -110,6 +110,16 @@ export default {
         title: '订单编号',
         dataIndex: 'code'
       }, {
+        title: '订单类型',
+        dataIndex: 'userId',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return <a-tag color="green">线上订单</a-tag>
+          } else {
+            return <a-tag color="blue">线下订单</a-tag>
+          }
+        }
+      }, {
         title: '所属药店',
         dataIndex: 'pharmacyName',
         customRender: (text, row, index) => {

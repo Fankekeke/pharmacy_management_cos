@@ -99,6 +99,28 @@
             </a-modal>
           </a-form-item>
         </a-col>
+        <a-col :span="24">
+          <a-form-item label='药品经营许可' v-bind="formItemLayout">
+            <a-upload
+              name="avatar"
+              action="http://127.0.0.1:9527/file/fileUpload/"
+              list-type="picture-card"
+              :file-list="fileList1"
+              @preview="handlePreview1"
+              @change="picHandleChange1"
+            >
+              <div v-if="fileList1.length < 8">
+                <a-icon type="plus" />
+                <div class="ant-upload-text">
+                  Upload
+                </div>
+              </div>
+            </a-upload>
+            <a-modal :visible="previewVisible1" :footer="null" @cancel="handleCancel1">
+              <img alt="example" style="width: 100%" :src="previewImage1" />
+            </a-modal>
+          </a-form-item>
+        </a-col>
       </a-row>
     </a-form>
 
@@ -161,7 +183,10 @@ export default {
       previewImage: '',
       localPoint: {},
       stayAddress: '',
-      childrenDrawer: false
+      childrenDrawer: false,
+      fileList1: [],
+      previewVisible1: false,
+      previewImage1: '',
     }
   },
   methods: {
@@ -209,6 +234,19 @@ export default {
     picHandleChange ({ fileList }) {
       this.fileList = fileList
     },
+    handleCancel1 () {
+      this.previewVisible1 = false
+    },
+    async handlePreview1 (file) {
+      if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj)
+      }
+      this.previewImage1 = file.url || file.preview
+      this.previewVisible1 = true
+    },
+    picHandleChange1 ({ fileList }) {
+      this.fileList1 = fileList
+    },
     reset () {
       this.loading = false
       this.form.resetFields()
@@ -223,8 +261,14 @@ export default {
       this.fileList.forEach(image => {
         images.push(image.response)
       })
+      // 获取图片List
+      let images1 = []
+      this.fileList1.forEach(image => {
+        images1.push(image.response)
+      })
       this.form.validateFields((err, values) => {
         values.images = images.length > 0 ? images.join(',') : null
+        values.drugBusinessLicense = images1.length > 0 ? images1.join(',') : null
         if (!err) {
           values.publisher = this.currentUser.userId
           this.loading = true

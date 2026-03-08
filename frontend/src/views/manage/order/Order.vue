@@ -60,7 +60,7 @@
         </template>
         <template slot="operation" slot-scope="text, record">
           <a-icon type="file-search" @click="orderViewOpen(record)" title="详 情"></a-icon>
-<!--          <a-icon v-if="record.orderStatus == 1" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="orderAuditOpen(record)" title="修 改" style="margin-left: 15px"></a-icon>-->
+          <a-icon v-if="record.orderStatus == 1" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="orderAuditOpen(record)" title="修 改" style="margin-left: 15px"></a-icon>
         </template>
       </a-table>
     </div>
@@ -156,7 +156,7 @@ export default {
           if (text !== null) {
             return text
           } else {
-            return '- -'
+            return <a-tag>线上订单</a-tag>
           }
         }
       }, {

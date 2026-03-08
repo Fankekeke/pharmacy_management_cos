@@ -131,7 +131,7 @@ export default {
               {{ text }}
             </a-popover>
           } else {
-            return '- -'
+            return record.custodianFix
           }
         }
       }, {

@@ -58,6 +58,7 @@ public class InventoryStatistics implements Serializable {
      * 保管人
      */
     private String custodian;
+    private String custodianFix;
 
     @TableField(exist = false)
     private String drugName;

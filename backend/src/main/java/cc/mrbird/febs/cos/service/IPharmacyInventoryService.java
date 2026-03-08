@@ -41,7 +41,7 @@ public interface IPharmacyInventoryService extends IService<PharmacyInventory> {
      * @return 结果
      * @throws Exception 异常
      */
-    boolean batchPutInventory(Integer pharmacyId, String pharmacyInventoryList) throws Exception;
+    boolean batchPutInventory(Integer pharmacyId, String pharmacyInventoryList, String purchaser) throws Exception;
 
     /**
      * 药品调拨

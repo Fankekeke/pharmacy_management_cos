@@ -57,6 +57,7 @@
           <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="showModal(record)" title="更新保质期" style="margin-right: 10px"></a-icon>
           <a-icon v-if="record.shelfStatus == 1" type="caret-down" @click="audit(record.id, 2)" title="取 消" style="margin-right: 10px"></a-icon>
           <a-icon v-if="record.shelfStatus == null || record.shelfStatus == 2" type="caret-up" @click="audit(record.id, 1)" title="设 置" style="margin-right: 10px"></a-icon>
+          <a-icon type="retweet" @click="cancelStock(record)" title="批次下架" style="margin-right: 10px"></a-icon>
         </template>
       </a-table>
     </div>
@@ -77,6 +78,33 @@
         :auto-size="{ minRows: 3, maxRows: 5 }"
       />
     </a-modal>
+    <!-- 批量下架弹窗 -->
+    <a-modal
+      v-model="batchCancelVisible"
+      title="批量下架"
+      @cancel="handleBatchCancelClose"
+      :width="900"
+      :footer="null">
+      <a-table
+        :columns="batchCancelColumns"
+        :data-source="batchCancelData"
+        :row-selection="{selectedRowKeys: batchSelectedRowKeys, onChange: onBatchSelectChange}"
+        :pagination="false"
+        size="middle">
+        <template slot="purchaseCodeSlot" slot-scope="text">
+          <a-tag color="blue">{{ text }}</a-tag>
+        </template>
+        <template slot="reserveSlot" slot-scope="text">
+          <a-tag color="green">{{ text }} 件</a-tag>
+        </template>
+      </a-table>
+      <div class="batch-cancel-footer" style="margin-top: 16px; text-align: right;">
+        <a-button @click="handleBatchCancelClose">取消</a-button>
+        <a-button type="primary" @click="confirmBatchCancel" :loading="batchCancelLoading">
+          确认下架 ({{ batchSelectedRowKeys.length }})
+        </a-button>
+      </div>
+    </a-modal>
   </a-card>
 </template>
 
@@ -92,6 +120,41 @@ export default {
   components: {inventoryAdd, RangeDate},
   data () {
     return {
+      batchCancelVisible: false,
+      batchCancelData: [],
+      batchSelectedRowKeys: [],
+      batchCancelLoading: false,
+      currentCancelRow: null,
+      batchCancelColumns: [
+        {
+          title: '采购单号',
+          dataIndex: 'purchaseCode',
+          scopedSlots: { customRender: 'purchaseCodeSlot' }
+        },
+        {
+          title: '采购日期',
+          dataIndex: 'purchaseDate'
+        },
+        {
+          title: '采购员',
+          dataIndex: 'purchaser'
+        },
+        {
+          title: '库存数量',
+          dataIndex: 'reserve',
+          scopedSlots: { customRender: 'reserveSlot' }
+        },
+        {
+          title: '操作',
+          key: 'action',
+          width: 150,
+          customRender: (text, record) => {
+            return [
+              <a-button type="link" onClick={() => this.cancelSingleBatch(record)}>下架</a-button>
+            ]
+          }
+        }
+      ],
       dateList: [],
       thisAuditData: {
         id: null,
@@ -209,6 +272,87 @@ export default {
     this.fetch()
   },
   methods: {
+    cancelStock (row) {
+      this.currentCancelRow = row
+      this.$get('/cos/purchase-info/queryPurchaseList', {
+        pharmacyId: row.pharmacyId,
+        drugId: row.drugId
+      }).then((r) => {
+        if (r.data.data && r.data.data.length > 0) {
+          this.batchCancelData = r.data.data
+          this.batchCancelVisible = true
+          this.batchSelectedRowKeys = []
+        } else {
+          this.$message.warning('暂无可下架的批次数据')
+        }
+      })
+    },
+
+    handleBatchCancelClose () {
+      this.batchCancelVisible = false
+      this.batchCancelData = []
+      this.batchSelectedRowKeys = []
+      this.currentCancelRow = null
+    },
+
+    onBatchSelectChange (selectedRowKeys) {
+      this.batchSelectedRowKeys = selectedRowKeys
+    },
+
+    cancelSingleBatch (record) {
+      const that = this
+      this.$confirm({
+        title: '确认下架',
+        content: `确定要下架批次 ${record.purchaseCode} 吗？`,
+        onOk () {
+          that.batchCancelLoading = true
+          that.$post('/cos/stockInfo/cancelStock', {
+            pharmacyId: that.currentCancelRow.pharmacyId,
+            drugId: that.currentCancelRow.drugId,
+            purchaseCode: record.purchaseCode,
+            batchType: 'single'
+          }).then(() => {
+            that.$message.success('下架成功')
+            that.fetch()
+            that.handleBatchCancelClose()
+          }).catch(() => {
+            that.batchCancelLoading = false
+          })
+        }
+      })
+    },
+
+    confirmBatchCancel () {
+      if (this.batchSelectedRowKeys.length === 0) {
+        this.$message.warning('请至少选择一个批次')
+        return
+      }
+
+      const selectedData = this.batchCancelData.filter(item =>
+        this.batchSelectedRowKeys.includes(item.purchaseCode)
+      )
+
+      const that = this
+      this.$confirm({
+        title: '确认下架',
+        content: `确定要下架选中的 ${selectedData.length} 个批次吗？`,
+        onOk () {
+          that.batchCancelLoading = true
+          that.$post('/cos/stockInfo/cancelStock', {
+            pharmacyId: that.currentCancelRow.pharmacyId,
+            drugId: that.currentCancelRow.drugId,
+            purchaseCodes: that.batchSelectedRowKeys,
+            batchType: 'batch'
+          }).then(() => {
+            that.$message.success('批量下架成功')
+            that.fetch()
+            that.handleBatchCancelClose()
+          }).catch(() => {
+            that.batchCancelLoading = false
+          })
+        }
+      })
+    },
     onChange (date, dateString) {
       this.dateList = dateString
     },

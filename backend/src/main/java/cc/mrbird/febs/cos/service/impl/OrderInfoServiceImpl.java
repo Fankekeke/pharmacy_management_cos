@@ -101,7 +101,8 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         }
         boolean result = this.updateById(orderInfo);
         if (flag) {
-            this.orderPaymentPlatform(orderInfo.getCode(), orderInfoVo.getStaffCode());
+            StaffInfo staffInfo = staffInfoMapper.selectById(orderInfoVo.getStaffId());
+            this.orderPaymentPlatform(orderInfo.getCode(), staffInfo.getCode());
         }
         // 重新更新订单信息
         return result;

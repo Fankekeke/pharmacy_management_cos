@@ -94,6 +94,11 @@ public class PharmacyInfo implements Serializable {
      */
     private Integer userId;
 
+    /**
+     * 药品经营许可
+     */
+    private String drugBusinessLicense;
+
     @TableField(exist = false)
     private Double distance;
 

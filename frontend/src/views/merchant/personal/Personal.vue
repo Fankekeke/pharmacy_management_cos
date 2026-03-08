@@ -94,6 +94,28 @@
                   </a-modal>
                 </a-form-item>
               </a-col>
+              <a-col :span="24">
+                <a-form-item label='药品经营许可' v-bind="formItemLayout">
+                  <a-upload
+                    name="avatar"
+                    action="http://127.0.0.1:9527/file/fileUpload/"
+                    list-type="picture-card"
+                    :file-list="fileList1"
+                    @preview="handlePreview1"
+                    @change="picHandleChange1"
+                  >
+                    <div v-if="fileList1.length < 8">
+                      <a-icon type="plus" />
+                      <div class="ant-upload-text">
+                        Upload
+                      </div>
+                    </div>
+                  </a-upload>
+                  <a-modal :visible="previewVisible1" :footer="null" @cancel="handleCancel1">
+                    <img alt="example" style="width: 100%" :src="previewImage1" />
+                  </a-modal>
+                </a-form-item>
+              </a-col>
             </a-row>
           </a-form>
           <a-button @click="handleSubmit" type="primary" :loading="loading">修改</a-button>
@@ -153,7 +175,10 @@ export default {
       fileList: [],
       previewVisible: false,
       previewImage: '',
-      merchantInfo: null
+      merchantInfo: null,
+      fileList1: [],
+      previewVisible1: false,
+      previewImage1: '',
     }
   },
   computed: {
@@ -214,6 +239,19 @@ export default {
     },
     picHandleChange ({ fileList }) {
       this.fileList = fileList
+    },
+    handleCancel1 () {
+      this.previewVisible1 = false
+    },
+    async handlePreview1 (file) {
+      if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj)
+      }
+      this.previewImage1 = file.url || file.preview
+      this.previewVisible1 = true
+    },
+    picHandleChange1 ({ fileList }) {
+      this.fileList1 = fileList
     },
     handlerClosed (localPoint) {
       this.childrenDrawer = false
@@ -287,6 +325,15 @@ export default {
         this.fileList = imageList
       }
     },
+    imagesInit1 (images) {
+      if (images !== null && images !== '') {
+        let imageList = []
+        images.split(',').forEach((image, index) => {
+          imageList.push({uid: index, name: image, status: 'done', url: 'http://127.0.0.1:9527/imagesWeb/' + image})
+        })
+        this.fileList1 = imageList
+      }
+    },
     setFormValues ({...user}) {
       this.userId = user.id
       let fields = ['name', 'address', 'businessStatus', 'longitude', 'latitude', 'businessHours', 'legalPerson', 'phone']
@@ -294,6 +341,10 @@ export default {
         if (key === 'images') {
           this.fileList = []
           this.imagesInit(user['images'])
+        }
+        if (key === 'drugBusinessLicense') {
+          this.fileList1 = []
+          this.imagesInit1(user['drugBusinessLicense'])
         }
         if (key === 'businessStatus') {
           user[key] = user[key].toString()
@@ -316,11 +367,20 @@ export default {
           images.push(image.name)
         }
       })
+      let images1 = []
+      this.fileList1.forEach(image => {
+        if (image.response !== undefined) {
+          images1.push(image.response)
+        } else {
+          images1.push(image.name)
+        }
+      })
       this.form.validateFields((err, values) => {
         if (!err) {
           this.loading = true
           let user = this.form.getFieldsValue()
           user.images = images.length > 0 ? images.join(',') : null
+          user.drugBusinessLicense = images1.length > 0 ? images1.join(',') : null
           user.id = this.rowId
           this.$put('/cos/pharmacy-info', {
             ...user

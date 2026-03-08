@@ -18,6 +18,7 @@
         phi.create_date,
         phi.legal_person,
         phi.phone,
+        phi.drug_business_license,
         phi.user_id
         from
         pharmacy_info phi

@@ -15,6 +15,7 @@
         di.brand,
         di.images,
         oi.code,
+        oi.user_id,
         ui.name,
         ui.phone,
         ui.address AS userAddress,
@@ -49,7 +50,7 @@
         <if test="orderDetail.pharmacyId != null">
             AND phi.user_id = #{orderDetail.pharmacyId}
         </if>
-
+        order by od.create_date desc
     </select>
 
     <!-- 根据订单ID获取购买详细物品 -->
