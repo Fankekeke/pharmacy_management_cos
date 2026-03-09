@@ -26,6 +26,22 @@
             ]"/>
           </a-form-item>
         </a-col>
+        <a-col :span="12">
+          <a-form-item label='货架地址' v-bind="formItemLayout">
+            <a-input v-decorator="[
+            'shelvesAddress',
+            { rules: [{ required: true, message: '请输入货架地址!' }] }
+            ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label='库存地址' v-bind="formItemLayout">
+            <a-input v-decorator="[
+            'stockAddress',
+            { rules: [{ required: true, message: '请输入库存地址!' }] }
+            ]"/>
+          </a-form-item>
+        </a-col>
         <a-col :span="24">
           <a-form-item label='备注' v-bind="formItemLayout">
             <a-textarea :rows="6" v-decorator="[

@@ -9,10 +9,10 @@
           <a-form :form="form" layout="vertical">
             <a-row :gutter="20">
               <a-col :span="24">
-                <a-form-item label='客户姓名' v-bind="formItemLayout">
+                <a-form-item label='用户姓名' v-bind="formItemLayout">
                   <a-input disabled v-decorator="[
                   'name',
-                  { rules: [{ required: true, message: '请输入客户姓名!' }] }
+                  { rules: [{ required: true, message: '请输入用户姓名!' }] }
                   ]"/>
                 </a-form-item>
               </a-col>

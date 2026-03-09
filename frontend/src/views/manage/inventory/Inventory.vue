@@ -57,7 +57,7 @@
           <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="showModal(record)" title="更新保质期" style="margin-right: 10px"></a-icon>
           <a-icon v-if="record.shelfStatus == 1" type="caret-down" @click="audit(record.id, 2)" title="取 消" style="margin-right: 10px"></a-icon>
           <a-icon v-if="record.shelfStatus == null || record.shelfStatus == 2" type="caret-up" @click="audit(record.id, 1)" title="设 置" style="margin-right: 10px"></a-icon>
-          <a-icon type="retweet" @click="cancelStock(record)" title="批次下架" style="margin-right: 10px"></a-icon>
+          <a-icon v-if="record.reserve != 0" type="retweet" @click="cancelStock(record)" title="批次下架" style="margin-right: 10px"></a-icon>
         </template>
       </a-table>
     </div>
@@ -88,7 +88,8 @@
       <a-table
         :columns="batchCancelColumns"
         :data-source="batchCancelData"
-        :row-selection="{selectedRowKeys: batchSelectedRowKeys, onChange: onBatchSelectChange}"
+        :row-selection="{selectedRowKeys: batchSelectedRowKeys, onChange: onBatchSelectChange, type: 'radio'}"
+        :rowKey="record => record.purchaseCode"
         :pagination="false"
         size="middle">
         <template slot="purchaseCodeSlot" slot-scope="text">
@@ -143,16 +144,6 @@ export default {
           title: '库存数量',
           dataIndex: 'reserve',
           scopedSlots: { customRender: 'reserveSlot' }
-        },
-        {
-          title: '操作',
-          key: 'action',
-          width: 150,
-          customRender: (text, record) => {
-            return [
-              <a-button type="link" onClick={() => this.cancelSingleBatch(record)}>下架</a-button>
-            ]
-          }
         }
       ],
       dateList: [],
@@ -321,30 +312,28 @@ export default {
         }
       })
     },
-
     confirmBatchCancel () {
       if (this.batchSelectedRowKeys.length === 0) {
-        this.$message.warning('请至少选择一个批次')
+        this.$message.warning('请选择一个批次')
         return
       }
 
-      const selectedData = this.batchCancelData.filter(item =>
+      const selectedData = this.batchCancelData.find(item =>
         this.batchSelectedRowKeys.includes(item.purchaseCode)
       )
 
       const that = this
       this.$confirm({
         title: '确认下架',
-        content: `确定要下架选中的 ${selectedData.length} 个批次吗？`,
+        content: `确定要下架批次 ${selectedData.purchaseCode} 吗？`,
         onOk () {
           that.batchCancelLoading = true
-          that.$post('/cos/stockInfo/cancelStock', {
-            pharmacyId: that.currentCancelRow.pharmacyId,
-            drugId: that.currentCancelRow.drugId,
-            purchaseCodes: that.batchSelectedRowKeys,
-            batchType: 'batch'
+          that.$get('/cos/purchase-info/cancelStock', {
+            pharmacyId: selectedData.pharmacyId,
+            drugId: selectedData.drugId,
+            num: selectedData.reserve
           }).then(() => {
-            that.$message.success('批量下架成功')
+            that.$message.success('下架成功')
             that.fetch()
             that.handleBatchCancelClose()
           }).catch(() => {

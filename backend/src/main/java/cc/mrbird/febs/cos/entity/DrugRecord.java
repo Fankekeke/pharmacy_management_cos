@@ -56,6 +56,8 @@ public class DrugRecord implements Serializable {
      * 创建时间
      */
     private String createDate;
+    private String shelvesAddress;
+    private String stockAddress;
 
 
 }

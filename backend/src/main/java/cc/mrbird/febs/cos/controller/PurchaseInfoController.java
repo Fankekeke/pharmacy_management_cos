@@ -70,6 +70,7 @@ public class PurchaseInfoController {
             record.put("purchaseCode", purchaseInfo.getCode()); // 采购单号
             record.put("purchaser", purchaseInfo.getPurchaser()); // 采购人
             record.put("purchaseDate", purchaseInfo.getCreateDate()); // 采购时间
+            record.put("pharmacyId", purchaseInfo.getPharmacyId());
             result.add(record);
         }
         return R.ok(result);

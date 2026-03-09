@@ -150,6 +150,16 @@ export default {
         title: '订单编号',
         dataIndex: 'code'
       }, {
+        title: '销售员工',
+        dataIndex: 'staffName',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return <a-tag>线上订单</a-tag>
+          }
+        }
+      }, {
         title: '负责人',
         dataIndex: 'legalPerson',
         customRender: (text, row, index) => {
