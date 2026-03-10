@@ -25,6 +25,7 @@
         <a-row style="padding-left: 24px;padding-right: 24px;">
             <a-col :span="8"><b>当前状态：</b>
             <span v-if="orderData.orderStatus == 0">待付款</span>
+            <span v-if="orderData.orderStatus == -1">待审核</span>
             <span v-if="orderData.orderStatus == 1">已下单</span>
             <span v-if="orderData.orderStatus == 2">配送中</span>
             <span v-if="orderData.orderStatus == 3">已收货</span>

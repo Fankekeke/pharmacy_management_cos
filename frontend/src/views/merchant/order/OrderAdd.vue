@@ -52,6 +52,29 @@
         </a-col>
       </a-row>
       <br/>
+      <div>
+        <a-form-item label='药品凭证' v-bind="formItemLayout">
+          <a-upload
+            name="avatar"
+            action="http://127.0.0.1:9527/file/fileUpload/"
+            list-type="picture-card"
+            :file-list="fileList"
+            @preview="handlePreview"
+            @change="picHandleChange"
+          >
+            <div v-if="fileList.length < 8">
+              <a-icon type="plus" />
+              <div class="ant-upload-text">
+                Upload
+              </div>
+            </div>
+          </a-upload>
+          <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
+            <img alt="example" style="width: 100%" :src="previewImage" />
+          </a-modal>
+        </a-form-item>
+      </div>
+      <br/>
       <a-row :gutter="10">
         <a-divider orientation="left">
           <span style="font-size: 13px">药品信息</span>
@@ -226,6 +249,7 @@ export default {
             record.unitPrice = e.unitPrice
             record.reserve = e.reserve
             record.drugId = e.drugId
+            record.prescriptionFlag = e.prescriptionFlag
             console.log(record)
           }
         })
@@ -314,6 +338,12 @@ export default {
     handleSubmit () {
       this.form.validateFields((err, values) => {
         values.orderDetailList = JSON.stringify(this.dataList)
+        // 获取图片List
+        let images = []
+        this.fileList.forEach(image => {
+          images.push(image.response)
+        })
+        values.images = images.length > 0 ? images.join(',') : null
         if (!err) {
           this.loading = true
           this.$post('/cos/order-info/platform', {

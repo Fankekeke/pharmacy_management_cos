@@ -3,21 +3,29 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.exception.FebsException;
 import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.cos.entity.OrderDetail;
 import cc.mrbird.febs.cos.entity.OrderInfo;
 import cc.mrbird.febs.cos.entity.PharmacyInfo;
 import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.entity.vo.OrderDetailVo;
 import cc.mrbird.febs.cos.entity.vo.OrderInfoVo;
+import cc.mrbird.febs.cos.service.IOrderDetailService;
 import cc.mrbird.febs.cos.service.IOrderInfoService;
 import cc.mrbird.febs.cos.service.IPharmacyInfoService;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author FanK
@@ -32,6 +40,8 @@ public class OrderInfoController {
     private final IStaffInfoService staffInfoService;
 
     private final IPharmacyInfoService pharmacyInfoService;
+
+    private final IOrderDetailService orderDetailService;
 
     /**
      * 分页获取订单信息
@@ -50,6 +60,17 @@ public class OrderInfoController {
             }
         }
         return R.ok(orderInfoService.selectOrderPage(page, orderInfo));
+    }
+
+    /**
+     * 订单审核
+     * @param orderId
+     * @param aiRemark
+     * @return
+     */
+    @GetMapping("/orderAudit")
+    public R orderAudit(Integer orderId, String aiRemark) {
+        return R.ok(orderInfoService.update(Wrappers.<OrderInfo>lambdaUpdate().set(OrderInfo::getAuditRemark, aiRemark).set(OrderInfo::getOrderStatus, 0).eq(OrderInfo::getId, orderId)));
     }
 
     /**
@@ -88,6 +109,65 @@ public class OrderInfoController {
     }
 
     /**
+     * 查询员工订单
+     *
+     * @param staffId 员工编号
+     * @return 订单信息
+     */
+    @GetMapping("/queryOrderByStaffId")
+    public R queryOrderByStaffId(Integer staffId) {
+        LinkedHashMap<String, Object> result = new LinkedHashMap<>();
+        StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, staffId));
+        if (staffInfo == null) {
+            result.put("orderCount", 0);
+            result.put("totalAmount", BigDecimal.ZERO);
+            result.put("totalQuantity", 0);
+            return R.ok(result);
+        }
+
+        // 获取该员工的所有订单
+        List<OrderInfo> orderList = orderInfoService.list(Wrappers.<OrderInfo>lambdaQuery().eq(OrderInfo::getStaffId, staffInfo.getId()));
+        if (CollectionUtil.isEmpty(orderList)) {
+            result.put("orderCount", 0);
+            result.put("totalAmount", BigDecimal.ZERO);
+            result.put("totalQuantity", 0);
+            return R.ok(result);
+        }
+
+        // 统计订单数量
+        int orderCount = orderList.size();
+
+        // 统计销售金额（订单总金额）
+        BigDecimal totalAmount = orderList.stream()
+                .map(OrderInfo::getTotalCost)
+                .filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // 统计药品销售数量
+        List<Integer> orderIds = orderList.stream()
+                .map(OrderInfo::getId)
+                .collect(Collectors.toList());
+
+        List<OrderDetail> detailList = orderDetailService.list(
+                Wrappers.<OrderDetail>lambdaQuery()
+                        .in(OrderDetail::getOrderId, orderIds)
+        );
+
+        int totalQuantity = 0;
+        if (CollectionUtil.isNotEmpty(detailList)) {
+            totalQuantity = detailList.stream()
+                    .mapToInt(OrderDetail::getQuantity)
+                    .filter(Objects::nonNull)
+                    .sum();
+        }
+
+        result.put("orderCount", orderCount);
+        result.put("totalAmount", NumberUtil.round(totalAmount, 2));
+        result.put("totalQuantity", totalQuantity);
+        return R.ok(result);
+    }
+
+    /**
      * 添加订单
      *
      * @param orderInfoVo 订单信息
@@ -107,7 +187,7 @@ public class OrderInfoController {
      */
     @GetMapping("/payment")
     public R orderPaymentPlatform(@RequestParam("orderCode") String orderCode, @RequestParam(value = "staffCode", required = false) String staffCode) {
-        orderInfoService.orderPaymentPlatform(orderCode, staffCode);
+        orderInfoService.orderPaymentPlatform(orderCode, "平台操作");
         return R.ok(true);
     }
 

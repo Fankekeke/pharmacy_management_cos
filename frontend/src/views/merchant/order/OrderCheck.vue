@@ -1,70 +1,58 @@
+
 <template>
-  <a-modal v-model="show" title="订单处理" @cancel="onClose" :width="800">
+  <a-modal v-model="show" title="订单审核" @cancel="onClose" :width="800">
     <template slot="footer">
-      <a-button key="back" @click="submit" type="primary">
-        发货
+      <a-button key="back" @click="submit('pass')" type="primary">
+        通过
       </a-button>
       <a-button @click="onClose">
         关闭
       </a-button>
     </template>
-    <div style="font-size: 13px;font-family: SimHei" v-if="orderAuditData !== null">
+    <div style="font-size: 13px;font-family: SimHei" v-if="orderCheckData !== null">
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">基础信息</span></a-col>
-        <a-col :span="8"><b>工单编号：</b>
-          {{ orderAuditData.code }}
-        </a-col>
-        <a-col :span="8"><b>客户名称：</b>
-          {{ orderAuditData.name }}
-        </a-col>
-        <a-col :span="8"><b>联系方式：</b>
-          {{ orderAuditData.phone }}
+        <a-col :span="8"><b>订单编号：</b>
+          {{ orderCheckData.code }}
         </a-col>
       </a-row>
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
-        <a-col :span="8"><b>当前状态：</b>
-          <span v-if="orderAuditData.status == 0">待付款</span>
-          <span v-if="orderAuditData.status == -1">待审核</span>
-          <span v-if="orderAuditData.status == 1">已下单</span>
-          <span v-if="orderAuditData.status == 2">配送中</span>
-          <span v-if="orderAuditData.status == 3">已收货</span>
-        </a-col>
         <a-col :span="8"><b>订单金额：</b>
-          {{ orderAuditData.totalCost }} 元
+          {{ orderCheckData.totalCost }} 元
         </a-col>
         <a-col :span="8"><b>下单时间：</b>
-          {{ orderAuditData.createDate }}
+          {{ orderCheckData.createDate }}
         </a-col>
       </a-row>
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">药店信息</span></a-col>
         <a-col :span="8"><b>药店名称：</b>
-            {{ orderAuditData.pharmacyName }}
-          </a-col>
+          {{ orderCheckData.pharmacyName }}
+        </a-col>
         <a-col :span="8"><b>药店地址：</b>
-          {{ orderAuditData.address }}
+          {{ orderCheckData.address }}
         </a-col>
         <a-col :span="8"><b>联系方式：</b>
-          {{ orderAuditData.pharmacyPhone }}
+          {{ orderCheckData.pharmacyPhone }}
         </a-col>
       </a-row>
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">购买药品信息</span></a-col>
-         <a-col :span="24">
-          <a-table :columns="columns" :data-source="durgList">
+        <a-col :span="24">
+          <a-table :columns="columns" :data-source="drugList">
           </a-table>
         </a-col>
       </a-row>
       <a-divider orientation="left">
-        <span style="font-size: 12px;font-family: SimHei">订单发货</span>
+        <span style="font-size: 12px;font-family: SimHei">审核备注</span>
       </a-divider>
       <a-row style="padding-left: 24px;padding-right: 24px;" :gutter="50">
         <a-col :span="24">
-          <a-form-item label='物流备注' v-bind="formItemLayout">
-            <a-textarea :rows="6" v-model="auditData.remark"/>
+          <a-form-item label='审核意见' v-bind="formItemLayout">
+            <a-textarea :rows="6" v-model="checkData.remark" placeholder="请输入审核意见"/>
           </a-form-item>
         </a-col>
       </a-row>
@@ -72,8 +60,7 @@
   </a-modal>
 </template>
 
-<script>
-import moment from 'moment'
+<script>import moment from 'moment'
 import {mapState} from 'vuex'
 function getBase64 (file) {
   return new Promise((resolve, reject) => {
@@ -89,13 +76,13 @@ const formItemLayout = {
   wrapperCol: { span: 24 }
 }
 export default {
-  name: 'OrderAudit',
+  name: 'OrderCheck',
   props: {
-    orderAuditShow: {
+    orderCheckShow: {
       type: Boolean,
       default: false
     },
-    orderAuditData: {
+    orderCheckData: {
       type: Object
     }
   },
@@ -105,7 +92,7 @@ export default {
     }),
     show: {
       get: function () {
-        return this.orderAuditShow
+        return this.orderCheckShow
       },
       set: function () {
       }
@@ -139,9 +126,9 @@ export default {
     }
   },
   watch: {
-    'orderAuditShow': function (value) {
+    'orderCheckShow': function (value) {
       if (value) {
-        this.selectOrderDetail(this.orderAuditData.id)
+        this.selectOrderDetail(this.orderCheckData.id)
       }
     }
   },
@@ -152,18 +139,18 @@ export default {
       fileList: [],
       previewVisible: false,
       previewImage: '',
-      auditData: {
+      checkData: {
         remark: ''
       },
       staffList: [],
-      durgList: []
+      drugList: []
     }
   },
   methods: {
     moment,
     selectOrderDetail (orderId) {
       this.$get(`/cos/order-detail/detail/${orderId}`).then((r) => {
-        this.durgList = r.data.data
+        this.drugList = r.data.data
       })
     },
     selectStaffByProduct (productId) {
@@ -172,7 +159,7 @@ export default {
       })
     },
     onDateChange (date) {
-      this.auditData.reserveDate = moment(date).format('YYYY-MM-DD')
+      this.checkData.reserveDate = moment(date).format('YYYY-MM-DD')
     },
     handleCancel () {
       this.previewVisible = false
@@ -196,10 +183,15 @@ export default {
         this.fileList = imageList
       }
     },
-    submit () {
-      this.$get(`/cos/order-info/ship`, {
-        'orderId': this.orderAuditData.id,
-        'remark': this.auditData.remark
+    submit (action) {
+      if (!this.checkData.remark || this.checkData.remark.trim() === '') {
+        this.$message.warning('请填写审核意见')
+        return
+      }
+      const endpoint = action === 'pass' ? 'audit-pass' : 'audit-reject'
+      this.$get(`/cos/order-info/orderAudit`, {
+        'orderId': this.orderCheckData.id,
+        'aiRemark': this.checkData.remark
       }).then((r) => {
         this.cleanData()
         this.$emit('success')
@@ -210,12 +202,11 @@ export default {
       this.$emit('close')
     },
     cleanData () {
-      this.auditData.remark = ''
+      this.checkData.remark = ''
     }
   }
 }
 </script>
 
 <style scoped>
-
 </style>

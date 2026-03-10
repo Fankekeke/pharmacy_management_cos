@@ -60,7 +60,8 @@
         </template>
         <template slot="operation" slot-scope="text, record">
           <a-icon type="file-search" @click="orderViewOpen(record)" title="详 情"></a-icon>
-<!--          <a-icon v-if="record.orderStatus == 1" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="orderAuditOpen(record)" title="修 改" style="margin-left: 15px"></a-icon>-->
+          <a-icon v-if="record.orderStatus == -1" type="audit" style="margin-left: 15px" @click="orderCheckOpen(record)" title="审 核"></a-icon>
+          <a-icon v-if="record.orderStatus == 1" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="orderAuditOpen(record)" title="出 库" style="margin-left: 15px"></a-icon>
         </template>
       </a-table>
     </div>
@@ -81,6 +82,12 @@
       :orderShow="orderView.visiable"
       :orderData="orderView.data">
     </order-view>
+    <order-check
+      @close="handleorderCheckViewClose"
+      @success="handleorderCheckViewSuccess"
+      :orderCheckShow="orderCheckView.visiable"
+      :orderCheckData="orderCheckView.data">
+    </order-check>
     <order-add
       @close="handleorderAddClose"
       @success="handleorderAddSuccess"
@@ -97,14 +104,19 @@ import OrderAdd from './OrderAdd'
 import OrderAudit from './OrderAudit'
 import OrderView from './OrderView'
 import OrderStatus from './OrderStatus.vue'
+import OrderCheck from './OrderCheck.vue'
 moment.locale('zh-cn')
 
 export default {
   name: 'order',
-  components: {OrderView, OrderAudit, RangeDate, OrderStatus, OrderAdd},
+  components: {OrderView, OrderAudit, RangeDate, OrderStatus, OrderAdd, OrderCheck},
   data () {
     return {
       advanced: false,
+      orderCheckView: {
+        visiable: false,
+        data: null
+      },
       orderAdd: {
         visiable: false
       },
@@ -217,6 +229,18 @@ export default {
     orderStatusOpen (row) {
       this.orderStatusView.data = row
       this.orderStatusView.visiable = true
+    },
+    orderCheckOpen (row) {
+      this.orderCheckView.data = row
+      this.orderCheckView.visiable = true
+    },
+    handleorderCheckViewClose () {
+      this.orderCheckView.visiable = false
+    },
+    handleorderCheckViewSuccess () {
+      this.orderCheckView.visiable = false
+      this.$message.success('审核成功')
+      this.fetch()
     },
     orderAuditOpen (row) {
       this.orderAuditView.data = row

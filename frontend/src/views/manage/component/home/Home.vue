@@ -78,6 +78,46 @@
         </a-card>
       </a-col>
       <a-col :span="24">
+        <div v-if="user.roleId == 77">
+          <a-row :gutter="16">
+            <a-col :span="8">
+              <a-card hoverable>
+                <a-row>
+                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">总销售额</a-col>
+                  <a-col :span="4"><a-icon type="shopping" style="font-size: 30px;margin-top: 3px"/></a-col>
+                  <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">
+                    {{ salesData.totalAmount }}
+                    <span style="font-size: 20px;margin-top: 3px">元</span>
+                  </a-col>
+                </a-row>
+              </a-card>
+            </a-col>
+            <a-col :span="8">
+              <a-card hoverable>
+                <a-row>
+                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">总销售数量</a-col>
+                  <a-col :span="4"><a-icon type="package" style="font-size: 30px;margin-top: 3px"/></a-col>
+                  <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">
+                    {{ salesData.totalQuantity }}
+                    <span style="font-size: 20px;margin-top: 3px">件</span>
+                  </a-col>
+                </a-row>
+              </a-card>
+            </a-col>
+            <a-col :span="8">
+              <a-card hoverable>
+                <a-row>
+                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">订单总数</a-col>
+                  <a-col :span="4"><a-icon type="file-text" style="font-size: 30px;margin-top: 3px"/></a-col>
+                  <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">
+                    {{ salesData.orderCount }}
+                    <span style="font-size: 20px;margin-top: 3px">单</span>
+                  </a-col>
+                </a-row>
+              </a-card>
+            </a-col>
+          </a-row>
+        </div>
         <a-card hoverable :loading="loading" :bordered="false" title="公告信息" style="margin-top: 15px">
           <div style="padding: 0 22px">
             <a-list item-layout="vertical" :pagination="pagination" :data-source="bulletinList">
@@ -119,6 +159,11 @@ export default {
         pageSize: 2
       },
       bulletinList: [],
+      salesData: {
+        totalAmount: 0,
+        totalQuantity: 0,
+        orderCount: 0
+      },
       titleData: {
         orderCode: 0,
         orderPrice: 0,
@@ -264,11 +309,23 @@ export default {
     console.log(this.user)
     this.loading = true
     this.selectHomeData()
+    this.queryOrderByStaffId()
     setTimeout(() => {
       this.loading = false
     }, 200)
   },
   methods: {
+    queryOrderByStaffId () {
+      if (this.user.roleId == 77) {
+        this.$get('/cos/order-info/queryOrderByStaffId', {
+          staffId: this.user.userId
+        }).then((res) => {
+          this.salesData.totalAmount = res.data.totalAmount || 0
+          this.salesData.totalQuantity = res.data.totalQuantity || 0
+          this.salesData.orderCount = res.data.orderCount || 0
+        })
+      }
+    },
     selectHomeData () {
       this.$get('/cos/pharmacy-info/home/data', {userId: this.user.roleId == 76 ? this.user.userId : null}).then((r) => {
         let titleData = { orderCode: r.data.orderCode, orderPrice: r.data.orderPrice, pharmacyNum: r.data.pharmacyNum, staffNum: r.data.staffNum }

@@ -14,4 +14,6 @@ public class OrderDetailVo {
      * 购买药品信息
      */
     private String drugString;
+
+    private String images;
 }

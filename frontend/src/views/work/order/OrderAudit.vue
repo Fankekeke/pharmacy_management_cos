@@ -15,7 +15,7 @@
           {{ orderAuditData.code }}
         </a-col>
         <a-col :span="8"><b>客户名称：</b>
-          {{ orderAuditData.userName }}
+          {{ orderAuditData.name }}
         </a-col>
         <a-col :span="8"><b>联系方式：</b>
           {{ orderAuditData.phone }}
@@ -24,10 +24,11 @@
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col :span="8"><b>当前状态：</b>
-          <span v-if="orderAuditData.status == 0">待付款</span>
-          <span v-if="orderAuditData.status == 1">已下单</span>
-          <span v-if="orderAuditData.status == 2">配送中</span>
-          <span v-if="orderAuditData.status == 3">已收货</span>
+          <span v-if="orderAuditData.orderStatus == 0">待付款</span>
+          <span v-if="orderAuditData.orderStatus == -1">待审核</span>
+          <span v-if="orderAuditData.orderStatus == 1">已下单</span>
+          <span v-if="orderAuditData.orderStatus == 2">配送中</span>
+          <span v-if="orderAuditData.orderStatus == 3">已收货</span>
         </a-col>
         <a-col :span="8"><b>订单金额：</b>
           {{ orderAuditData.totalCost }} 元

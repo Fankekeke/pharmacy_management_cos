@@ -68,6 +68,8 @@ public class OrderInfo implements Serializable {
      * 所属员工
      */
     private Integer staffId;
+    private String images;
+    private String auditRemark;
 
     @TableField(exist = false)
     private String userName;

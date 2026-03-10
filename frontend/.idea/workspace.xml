@@ -23,27 +23,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b51975f-5e37-45a1-bd9d-0f3c12f944d0" name="Default Changelist" comment="Default Changelist">
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/entity/EnterpriseInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/entity/EnterpriseInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/entity/PharmacyInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/entity/PharmacyInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/config/alipay.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/resources/config/alipay.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/EnterpriseInfoMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/EnterpriseInfoMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/PharmacyInfoMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/PharmacyInfoMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/merchant/order/OrderCheck.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/OrderInfoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/OrderInfoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/entity/OrderInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/entity/OrderInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/entity/vo/OrderDetailVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/entity/vo/OrderDetailVo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/entity/vo/OrderInfoVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/entity/vo/OrderInfoVo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/service/impl/OrderInfoServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/service/impl/OrderInfoServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/OrderInfoMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/OrderInfoMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/PharmacyInventoryMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/PharmacyInventoryMapper.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/manage/detail/Detail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/detail/Detail.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/manage/drug/Drug.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/drug/Drug.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/manage/drug/DrugAdd.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/drug/DrugAdd.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/manage/drug/DrugEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/drug/DrugEdit.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/manage/inventory/Inventory.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/inventory/Inventory.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/manage/order/Order.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/order/Order.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/manage/pharmacy/PharmacyAdd.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/pharmacy/PharmacyAdd.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/manage/pharmacy/PharmacyEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/pharmacy/PharmacyEdit.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/manage/statistics/Statistics.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/statistics/Statistics.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/manage/stock/InventoryAdd.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/stock/InventoryAdd.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/merchant/personal/Personal.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/personal/Personal.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/supply/enterprise/EnterpriseAdd.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/supply/enterprise/EnterpriseAdd.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/supply/enterprise/EnterpriseEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/supply/enterprise/EnterpriseEdit.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/supply/purchase/PurchaseAdd.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/supply/purchase/PurchaseAdd.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/manage/component/home/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/component/home/Home.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/manage/order/OrderAudit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/order/OrderAudit.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/manage/order/OrderView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/order/OrderView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/merchant/order/Order.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/order/Order.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/merchant/order/OrderAdd.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/order/OrderAdd.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/merchant/order/OrderAudit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/order/OrderAudit.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/merchant/order/OrderView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/merchant/order/OrderView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/supply/medication/OrderView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/supply/medication/OrderView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/user/cart/CartView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/user/cart/CartView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/user/medication/OrderView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/user/medication/OrderView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/user/order/Order.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/user/order/Order.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/user/order/OrderEvaluate.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/user/order/OrderEvaluate.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/user/order/OrderView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/user/order/OrderView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/user/personal/Personal.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/user/personal/Personal.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/work/order/OrderAdd.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/work/order/OrderAdd.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/work/order/OrderAudit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/work/order/OrderAudit.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/work/order/OrderView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/work/order/OrderView.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,21 +109,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "G:/Project/20250422连锁药店管理系统/pharmacy_management_cos/frontend",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "yarn",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;G:/Project/20250422连锁药店管理系统/pharmacy_management_cos/frontend&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="G:\Project\20250422连锁药店管理系统\pharmacy_management_cos\frontend\src\views\work" />
@@ -279,6 +285,8 @@
       <workItem from="1770895483229" duration="196000" />
       <workItem from="1772196952389" duration="4150000" />
       <workItem from="1772939600987" duration="9370000" />
+      <workItem from="1773051081261" duration="3252000" />
+      <workItem from="1773136974556" duration="12051000" />
     </task>
     <servers />
   </component>

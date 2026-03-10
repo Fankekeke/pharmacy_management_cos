@@ -84,6 +84,7 @@
         di.category,
         di.classification,
         di.dosage_form,
+        di.prescription_flag,
         di.unit_price,
         di.images
         from

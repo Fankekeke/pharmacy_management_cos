@@ -9,6 +9,29 @@
     :visible="show"
     style="height: calc(100% - 55px);overflow: auto;padding-bottom: 53px;">
     <div style="font-size: 13px;font-family: SimHei">
+      <div v-if="hasPrescriptionDrug" style="color: red; font-size: 12px;">
+        <a-icon type="warning" />
+        <a-form-item label=' 购物车中含有处方药，请上传处方凭证'>
+          <a-upload
+            name="avatar"
+            action="http://127.0.0.1:9527/file/fileUpload/"
+            list-type="picture-card"
+            :file-list="fileList"
+            @preview="handlePreview"
+            @change="picHandleChange"
+          >
+            <div v-if="fileList.length < 8">
+              <a-icon type="plus" />
+              <div class="ant-upload-text">
+                Upload
+              </div>
+            </div>
+          </a-upload>
+          <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
+            <img alt="example" style="width: 100%" :src="previewImage" />
+          </a-modal>
+        </a-form-item>
+      </div>
       <a-row :gutter="20" style="width: 100%;margin-top: 20px">
         <a-col :span="12" v-for="(item, index) in cartData" :key="index" style="margin-bottom: 15px">
           <div style="width: 100%;margin-bottom: 15px;text-align: left;box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;">
@@ -44,8 +67,17 @@
 
 <script>
 import moment from 'moment'
-import {mapState} from "vuex";
+import {mapState} from 'vuex'
 moment.locale('zh-cn')
+
+function getBase64 (file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = error => reject(error)
+  })
+}
 export default {
   name: 'cartView',
   props: {
@@ -67,11 +99,17 @@ export default {
       },
       set: function () {
       }
+    },
+    hasPrescriptionDrug () {
+      return this.cartData.some(item => item.prescriptionFlag == 1)
     }
   },
   data () {
     return {
-      loading: false
+      loading: false,
+      fileList: [],
+      previewVisible: false,
+      previewImage: ''
     }
   },
   watch: {
@@ -82,16 +120,45 @@ export default {
     }
   },
   methods: {
+    handleCancel () {
+      this.previewVisible = false
+    },
+    async handlePreview (file) {
+      if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj)
+      }
+      this.previewImage = file.url || file.preview
+      this.previewVisible = true
+    },
+    picHandleChange ({fileList}) {
+      this.fileList = fileList
+    },
+    getPrescriptionDrugs () {
+      return this.cartData.filter(item => item.prescriptionFlag == 1)
+    },
     handleSubmit () {
       if (this.cartData.length === 0) {
         this.$message.error('无数据信息！')
         return false
       }
+      // 判断是否包含处方药
+      const hasPrescription = this.cartData.some(item => item.prescriptionFlag == 1)
+      if (hasPrescription && this.fileList.length === 0) {
+        this.$message.warning('购物车中含有处方药，请上传处方凭证！')
+        return false
+      }
+
+      // 获取图片List
+      let images = []
+      this.fileList.forEach(image => {
+        images.push(image.response)
+      })
       let drugList = []
       this.cartData.forEach(e => {
         drugList.push({pharmacyId: e.pharmacyId, drugId: e.drugId, total: e.total, unitPrice: e.unitPrice})
       })
       let values = {userId: this.currentUser.userId, drugString: JSON.stringify(drugList)}
+      values.images = images.length > 0 ? images.join(',') : null
       this.$post('/cos/order-info/orderSubmit', values).then((r) => {
         this.$emit('success')
       })

@@ -80,6 +80,7 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         orderInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         orderInfo.setPharmacyId(orderInfoVo.getPharmacyId());
         orderInfo.setStaffId(orderInfoVo.getStaffId());
+        orderInfo.setImages(orderInfoVo.getImages());
         // 所属用户
         UserInfo userInfo = userInfoMapper.selectOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, orderInfoVo.getUserId()));
         if (userInfo != null) {
@@ -200,6 +201,8 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
             logisticsInfo.setRemark("订单" + orderInfo.getCode() + "已出库");
             logisticsInfoService.save(logisticsInfo);
             orderInfo.setOrderStatus(2);
+        } else if (StrUtil.isNotEmpty(orderInfo.getImages()) && "平台操作".equals(staffCode)) {
+            orderInfo.setOrderStatus(1);
         } else {
             orderInfo.setOrderStatus(3);
         }
@@ -259,10 +262,11 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
 
         orderSubMap.forEach((key, value) -> {
             OrderInfo orderItem = new OrderInfo();
+            orderItem.setImages(orderDetailVo.getImages());
             orderItem.setCode(StrUtil.toString(System.currentTimeMillis()) + key);
             orderItem.setPharmacyId(key);
             orderItem.setCreateDate(DateUtil.formatDateTime(new Date()));
-            orderItem.setOrderStatus(0);
+            orderItem.setOrderStatus(StrUtil.isEmpty(orderDetailVo.getImages()) ? 0 : -1);
             orderItem.setUserId(userInfo.getId());
             this.save(orderItem);
             // 总价格

@@ -25,10 +25,29 @@
         <a-col :span="8"><b>联系方式：</b>
           {{ orderData.phone ? orderData.phone : '- -' }}
         </a-col>
+        <a-col :span="24" style="margin-top: 25px"><b>药品凭证：</b>
+          <div v-if="orderData.images && orderData.images.split(',').length > 0" style="margin-top: 10px;">
+            <a-row :gutter="16">
+              <a-col :span="4" v-for="(image, index) in orderData.images.split(',')" :key="index" style="margin-bottom: 10px;">
+                <a-popover>
+                  <template slot="content">
+                    <img :src="'http://127.0.0.1:9527/imagesWeb/' + image" style="max-width: 400px; max-height: 400px;" />
+                  </template>
+                  <img
+                    :src="'http://127.0.0.1:9527/imagesWeb/' + image"
+                    style="width: 100px; height: 100px; object-fit: cover; cursor: pointer; border-radius: 4px;"
+                  />
+                </a-popover>
+              </a-col>
+            </a-row>
+          </div>
+          <div v-else style="margin-top: 10px; color: #999;">暂无药品凭证</div>
+        </a-col>
       </a-row>
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col :span="8"><b>当前状态：</b>
+          <span v-if="orderData.orderStatus == -1">待审核</span>
           <span v-if="orderData.orderStatus == 0">待付款</span>
           <span v-if="orderData.orderStatus == 1">已下单</span>
           <span v-if="orderData.orderStatus == 2">配送中</span>
