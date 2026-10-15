@@ -1,20 +1,17 @@
-### 基于SpringBoot + Vue的连锁药店管理系统.
+![](https://img.shields.io/badge/License-MIT-blue.svg)
 
-连锁药店管理系统、药药品进销存、处方药审核、多门店协同、智慧药房SaaS
+![](https://img.shields.io/badge/Version-1.0.0-brightgreen.svg)
 
-###### 管理员：
-公告管理 、药品管理 、库存统计 、物流信息 、订单详情 、订单评价 、订单信息 、缴费记录 、药店管理 、库存调整 、员工管理 、用户管理 、数据统计 、销售排行 、员工统计 、供应采购 、供应商管理 、电子处方 、药品采购 、库房预警 、销售统计 、药品处方 、采购物流 、管理员管理 、药店库存 、职位变动 、薪资发放。
+![](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 
-###### 用户：
-账户注册登录、密码修改、个人信息 、我的订单 、缴费记录 、订单评价 、药品购买 、在线支付。
+# 基于 SpringBoot + Vue 的连锁药店管理系统 (Chain Pharmacy Management System)
 
-###### 药店：
-账户注册登录、密码修改、订单管理 、员工管理 、药店信息 、库存调整 、员工薪资 、订单详情 、岗位调整 、出入库详情 、药店库存、数据台账统计。
+药品进销存 · 电子处方 · 多门店协同 · 批次效期 · 在线购药 · 采购供应 · 数据统计 · 薪资管理
 
-###### 员工：
-账户注册登录、密码修改、我的信息 、我的薪资 、订单管理 、药品记录。
+本项目是一套面向连锁药店的综合管理系统，采用前后端分离架构，覆盖管理员、用户（消费者）、药店（门店）、员工四类角色。系统围绕"药品管理、多门店库存、电子处方、在线购药、供应采购、订单管理、薪资发放、数据统计"等核心业务设计，支持用户在线浏览药品、电子处方购药、支付宝在线支付，药店完成门店库存管理、出入库操作与数据台账统计，员工处理订单与药品记录，管理员统筹药品主数据、供应商管理、采购物流、销售统计与全连锁运营分析，适用于连锁药店总部管控、多门店协同运营、处方药合规销售及消费者在线购药场景。
 
 #### 安装环境
+️**注意**：请确保您的开发环境已安装以下依赖。
 
 JAVA 环境 
 
@@ -22,24 +19,208 @@ Node.js环境 [https://nodejs.org/en/] 选择14.17
 
 Yarn 打开cmd， 输入npm install -g yarn !!!必须安装完毕nodejs
 
-Mysql 数据库 [https://blog.csdn.net/qq_40303031/article/details/88935262] 一定要把账户和密码记住
+Mysql 数据库 一定要把账户和密码记住
 
 redis
 
-Idea 编译器 [https://blog.csdn.net/weixin_44505194/article/details/104452880]
+Idea 编译器
 
-WebStorm OR VScode 编译器 [https://www.jianshu.com/p/d63b5bae9dff]
+WebStorm OR VScode 编译器
 
 #### 采用技术及功能
 
 后端：SpringBoot、MybatisPlus、MySQL、Redis、
 前端：Vue、Apex、Antd、Axios
 
-平台前端：vue(框架) + vuex(全局缓存) + rue-router(路由) + axios(请求插件) + apex(图表)  + antd-ui(ui组件)
+平台前端：vue(框架) + vuex(全局缓存) + rue-router(路由) + axios(请求插件) + apex(图表)  + antd-ui(ui组件) + 百度地图 API
 
 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)
 
 开发环境：windows10 or windows7 ， vscode or webstorm ， idea + lambok
+
+---
+
+## 核心特性
+
+- **多角色多门店协同**：区分管理员、用户、药店、员工四类角色，支持总部统一管控与各门店独立运营。
+- **药品全生命周期管理**：覆盖药品档案、批准文号、生产厂家、剂型规格、处方/OTC分类、上下架管理。
+- **批次效期与库存预警**：按批次管理库存，支持近效期预警、库存下限预警，自动触发补货建议。
+- **电子处方合规管理**：支持电子处方录入、审核、流转与归档，处方药销售需关联有效处方记录。
+- **多门店库存协同**：总部统一管理药品主数据，各门店独立库存，支持门店间调拨与库存调整。
+- **供应采购全流程**：支持供应商管理、采购订单生成、采购入库、采购物流跟踪与采购结算。
+- **订单全生命周期管理**：覆盖下单、支付、发货、物流跟踪、收货确认与评价完整流程。
+- **支付宝在线支付**：集成支付宝支付接口，支持用户在线完成药品订单缴费。
+- **薪资与人事管理**：支持员工职位变动记录、岗位调整、薪资发放与员工统计。
+- **多维度数据统计**：支持首页统计看板、销售排行、员工统计、月份统计与销售趋势分析。
+- **数据台账与GSP合规**：药店端生成出入库台账、库存台账，满足药品经营质量管理规范要求。
+---
+
+## 适用场景
+
+- 连锁药店总部多门店统一管控
+- 药店门店日常进销存与台账管理
+- 消费者在线购药与支付宝支付
+- 处方药电子处方合规销售管理
+- 销售数据统计与经营分析
+---
+
+## 适用场景
+
+- 农产品电商平台在线销售
+- 农业合作社产品直销
+- 农户线上开店与订单管理
+- 多销售门店库存协同管理
+- 农产品供应链采购与入库管理
+- 消费者在线选购与支付宝支付
+- 销售数据统计与经营分析
+- 产品咨询答疑与用户评价管理
+---
+
+## 功能模块概览
+
+### 管理员端
+
+管理员端负责连锁药店总部整体运营、药品主数据管理、供应链管控、多门店协同与数据统计分析：
+
+**系统基础管理**
+
+- **首页统计看板**：展示今日订单数、销售额、用户数、库存预警数、待处理处方、待审核采购等核心指标，以图表形式呈现销售趋势与热门药品。
+- **公告管理**：发布平台公告、促销活动、药品上新通知、系统维护信息与政策更新。
+- **用户管理**：管理注册用户账号、实名认证状态、收货地址与违规处理。
+- **员工管理**：管理全连锁员工账号、角色权限、所属门店、职位信息与操作日志。
+- **管理员管理**：管理后台管理员账号、角色分配与权限配置。
+- **职位变动**：记录员工职位升降、岗位调动、入职离职等人事变动历史。
+- **薪资发放**：管理员工薪资标准、月度薪资计算、发放记录与薪资条推送。
+
+**药品与库存管理**
+
+- **药品管理**：管理药品主数据，包括通用名、商品名、剂型、规格、批准文号、生产厂家、处方/OTC分类、价格、图片与上下架状态。
+- **库存统计**：统计各药品、各门店的库存总量、可用库存、批次分布与效期状态。
+- **药店库存**：查看各门店实时库存，支持按门店、药品分类、批次维度查询。
+- **库存调整**：处理盘点差异、报损报溢、调拨出入库等库存调整操作，记录调整原因。
+- **库房预警**：设置库存下限与近效期阈值，自动预警库存不足与临期药品，生成补货建议。
+
+**供应与采购管理**
+
+- **供应商管理**：管理供应商档案，包括名称、联系人、联系方式、供应产品、资质文件与信用评级。
+- **供应采购**：查看各门店采购需求，生成采购计划，管理采购订单与采购进度。
+- **药品采购**：执行采购下单、采购入库、采购验收与采购结算。
+- **采购物流**：跟踪采购订单物流状态，记录到货时间、批次号、有效期与入库信息。
+
+**订单与物流管理**
+
+- **订单信息**：查看所有用户订单，包括订单号、下单时间、药品信息、金额与支付状态。
+- **订单详情**：查看订单详细信息，包括收货地址、支付方式、物流单号、处方关联与操作记录。
+- **订单评价**：查看用户对订单与药品的评价，处理差评与投诉。
+- **物流信息**：管理订单物流单号，更新配送状态，支持物流轨迹查询。
+- **缴费记录**：查看所有支付记录，包括支付金额、支付方式、支付时间与对账信息。
+
+**处方与合规管理**
+
+- **电子处方**：管理电子处方档案，支持处方录入、审核、流转与归档，处方药销售需校验有效处方。
+- **药品处方**：管理处方药品目录，设置处方药销售规则与审核流程。
+- **产品答疑**：查看用户对药品的咨询留言，安排药师或管理员在线回复用药指导。
+
+**数据统计与分析**
+
+- **数据统计**：展示平台整体销售数据、用户增长趋势、药品销量分布与订单转化率。
+- **销售排行**：按药品、分类、门店维度统计销售排行，识别热销与滞销药品。
+- **员工统计**：统计各员工处理的订单数、销售额与服务评价。
+- **销售统计**：按日/周/月统计销售额、订单量、客单价与复购率。
+- **月份统计**：按月度统计销售额、订单量、新增用户与库存周转情况。
+
+**门店与违规管理**
+
+- **药店管理**：管理连锁门店信息，包括门店名称、地址、负责人、联系方式、营业状态与执业药师信息。
+- **违规记录**：记录异常订单、虚假处方、违规用户等行为，支持警告、封禁与申诉处理。
+
+### 用户端（消费者）
+
+用户端面向药品消费者，提供药品浏览、在线购药、支付与订单管理服务：
+
+**账户与个人信息**
+
+- **账户注册登录**：支持手机号注册登录，密码加密存储。
+- **密码修改**：支持在线修改登录密码，保障账户安全。
+- **个人信息**：维护姓名、手机号、收货地址、头像等个人资料。
+
+**购药与订单服务**
+
+- **药品购买**：浏览药品列表与详情，按分类/关键字搜索，加入购物车，选择规格与数量提交订单。处方药需上传或关联有效电子处方。
+- **我的订单**：查看订单列表与详情，跟踪订单状态（待支付、已支付、已发货、已完成）。
+- **缴费记录**：查看历史支付记录，包括支付金额、时间与订单关联信息。
+- **在线支付**：下单后通过支付宝完成在线支付，支付状态实时同步。
+- **订单评价**：对已完成订单进行评分与文字评价，分享购药体验。
+
+**消息通知**
+
+- **我的消息**：接收订单状态变更、发货通知、物流更新、活动推送与系统公告。
+
+### 药店端（门店）
+
+药店端面向连锁门店管理者，负责门店日常运营、库存管理与数据台账统计：
+
+**账户与门店管理**
+
+- **账户注册登录**：门店账号由管理员分配，支持登录与密码修改。
+- **药店信息**：维护门店基本信息，包括名称、地址、负责人、联系方式、营业时间与执业药师信息。
+- **员工管理**：管理本门店员工账号、角色权限与排班信息。
+
+**库存与出入库管理**
+
+- **药店库存**：查看本门店实时库存，支持按药品分类、批次、效期维度查询。
+- **库存调整**：处理本门店盘点差异、报损报溢、调拨出入库等库存调整操作。
+- **出入库详情**：查看本门店所有出入库记录，包括采购入库、销售出库、调拨、报损等明细。
+
+**订单管理**
+
+- **订单管理**：查看本门店订单，处理待发货订单，录入物流信息。
+- **订单详情**：查看订单详细信息，包括药品明细、处方关联、收货地址与支付状态。
+
+**数据台账与薪资**
+
+- **数据台账统计**：生成本门店进销存台账、销售台账、库存台账，支持按日/月导出报表。
+- **员工薪资**：查看本门店员工薪资标准与发放记录，提交薪资调整申请。
+
+### 员工端
+
+员工端面向门店一线员工，协助完成订单处理与药品记录工作：
+
+**账户与个人信息**
+
+- **账户注册登录**：员工账号由门店管理员分配，支持登录与密码修改。
+- **我的信息**：维护个人姓名、工号、联系方式、所属门店与岗位信息。
+
+**业务管理**
+
+- **我的薪资**：查看个人薪资标准、月度薪资明细与发放记录。
+- **订单管理**：查看本门店待处理订单，协助完成订单配药、打包与发货操作。
+- **药品记录**：记录药品出入库操作、盘点数据、处方核验与异常情况上报。
+
+---
+
+## 项目结构
+
+```text
+pharmacy-dispensing-system/
+├── backend/            # 后端 API 服务
+│   ├── src/
+│   │   ├── controllers/  # 控制器
+│   │   ├── models/       # 数据模型
+│   │   ├── routes/       # 路由
+│   │   └── services/     # 业务逻辑
+│   └── package.json
+├── frontend/           # 前端 Web 应用
+│   ├── src/
+│   │   ├── views/      # 页面视图
+│   │   ├── components/ # 公共组件
+│   │   └── store/      # 状态管理
+│   └── package.json
+├── docs/               # 项目文档与 API 接口说明
+├── LICENSE
+└── README.md
+```
+---
 
 
 #### 前台启动方式
@@ -49,25 +230,28 @@ WebStorm OR VScode 编译器 [https://www.jianshu.com/p/d63b5bae9dff]
 #### 默认后台账户密码
 [管理员]
 admin
-1234qwer
+123456
+
+[员工]
+fank
+123456
 
 #### 项目截图
-暂无
-
 |  |  |
 |---------------------|---------------------|
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/226ea20e-c557-4015-a64b-47016ddd2f64.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/e6d2a2bb-55a7-4b15-99a0-5501181efb4b.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/82ee4ca4-319a-4c92-969f-628e1facc4a2.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/dfa9991d-7a7f-425f-98f7-4726c212fc2c.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/65b9d3a9-f18c-4a73-94b0-15a2b225d3f7.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/d314c2e0-10d9-4333-9728-01dfbd02820f.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/25f9657e-7cf9-4edb-b29c-fb713fabbe99.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/bbaf4f47-ae8f-4448-9130-dee595b45798.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/8e208c92-51be-4019-9f9f-0afd39124dbe.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/b911adf6-db70-4247-b870-1f44a15b22e1.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/7d069500-257b-4442-82c7-d682f4c0eb1a.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/a5c13cff-9ebe-4a5d-a9b3-9bdfa3daa043.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/5c84a71f-d119-4972-9eba-c79592c90125.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/2057544b-b437-4cb1-8572-8421b871b59d.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/5a55b28c-3c40-488f-b183-1a7ef9141c40.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/995138bf-c205-4cb6-87dc-83745af2a1d7.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/4ea622be-4455-4e7c-9610-ee8cdbc4adab.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/006408aa-a9fe-4060-9f5c-377864c824e5.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/3e5eb475-381b-4474-baac-b857a51a1157.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/6215e83e-0c81-4dc8-8541-37067ca08bfa.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/2e446824-b944-4d04-8168-114e08cab531.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/627de6fb-5a75-4fa5-a6c6-2c7b83462228.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/0f9fb450-3feb-4767-bfa1-53f343dd0d12.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/work/936e9baf53eb9a217af4f89c616dc19.png) |
+| ![](./assets/image%20(1).png) | ![](./assets/image%20(2).png) |
+| ![](./assets/image%20(3).png) | ![](./assets/image%20(4).png) |
+| ![](./assets/image%20(5).png) | ![](./assets/image%20(6).png) |
+| ![](./assets/image%20(7).png) | ![](./assets/image%20(8).png) |
+| ![](./assets/image%20(9).png) | ![](./assets/image%20(10).png) |
+| ![](./assets/image%20(11).png) | ![](./assets/image%20(12).png) |
+| ![](./assets/image%20(13).png) | ![](./assets/image%20(14).png) |
+| ![](./assets/image%20(15).png) | ![](./assets/image%20(16).png) |
+| ![](./assets/image%20(17).png) | ![](./assets/image%20(18).png) |
+| ![](./assets/image%20(19).png) | ![](./assets/image%20(20).png) | 
+| ![](./assets/image%20(21).png) | ![](./assets/image%20(22).png) | 
+| ![](./assets/image%20(23).png) |  | 
+
 
 #### 演示视频
 
@@ -85,7 +269,10 @@ WeChat: `Storm_Berserker`
 
 > 项目部署调试不好包退！功能逻辑没讲明白包退！
 
+<div align=center><img align="center" src="./assets/product_word.png" alt="fankekeke" /></div>
+
 #### 其它资源
+[2026年-答辩顺利通过-客户评价🀄](https://berserker287.github.io/2026/06/29/2026%E5%B9%B4%E7%AD%94%E8%BE%A9%E9%A1%BA%E5%88%A9%E9%80%9A%E8%BF%87/)
 
 [2025年-答辩顺利通过-客户评价🍜](https://berserker287.github.io/2025/06/18/2025%E5%B9%B4%E7%AD%94%E8%BE%A9%E9%A1%BA%E5%88%A9%E9%80%9A%E8%BF%87/)
 
@@ -109,4 +296,8 @@ WeChat: `Storm_Berserker`
 
 More info: [悲伤的橘子树](https://berserker287.github.io/)
 
-<p><img align="center" src="https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/%E5%90%88%E4%BD%9C%E7%89%A9%E6%96%99%E6%A0%B7%E5%BC%8F%20(3).png" alt="fankekeke" /></p>
+<div align="center"><img align="center" src="./assets/chat_qr_code.png" alt="fankekeke" width=250 /></div>
+
+<p><img align="center" src="./assets/wechat_group.png" alt="fankekeke" /></p>
+
+**感谢查看**
